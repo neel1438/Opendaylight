@@ -14,13 +14,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import jquery.MyDocument;
  
 /*
  * Parsing the xml doc with Default DOM Parser
  */
 public class DOMParse {
 	static File xmlfile;
-	static Document parsedDocument;
+	static MyDocument parsedDocument;
 	
 	
 	/*
@@ -35,8 +36,9 @@ public class DOMParse {
 	{
 		xmlfile=new File(file);
 		DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-	 	parsedDocument = dBuilder.parse(xmlfile);
-		parsedDocument.normalizeDocument();
+	 	Document document = dBuilder.parse(xmlfile);
+		document.normalizeDocument();
+		parsedDocument=new MyDocument(document);
 	}
 	
 	/*
