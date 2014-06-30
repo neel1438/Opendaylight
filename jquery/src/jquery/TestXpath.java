@@ -18,6 +18,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -25,8 +26,75 @@ import org.xml.sax.SAXException;
 public class TestXpath {
 
     public static void main(String[] args) {
+    	Node dummy1 = null,dummy2 = null,dummy3=null,dummy4=null;
+    	 final Node c1 = new MyNode(dummy1){
+    	   boolean getHasChildren(){
+    	        return false;
+    	        }
+    	    
+    	   public NamedNodeMap getAttributes(){
+    	    
+    	        //return the ID attribute
+    		   return null; 
+    	    }
+    	    
+    	    String getName(){
+    	    
+    	        return "c1";
+    	    }
+    	};
 
-            try {
+    	final Node c2 = new MyNode(dummy2){
+     	   boolean getHasChildren(){
+     	        return false;
+     	        }
+     	    
+     	   public NamedNodeMap getAttributes(){
+     	    
+     	        //return the ID attribute
+     		   return null; 
+     	    }
+     	    
+     	    public String getNodeName(){
+     	    
+     	        return "c2";
+     	    }
+     	};
+
+
+    	final Node B = new MyNode(dummy3){
+    		//MyNode nextsibling;
+    	   
+    		public String getNodeName(){ 
+    		   return "B";
+    	    	}
+    	    
+    	    
+    	//    Node nextSibling = null;
+    	    
+    	    public MyNode getFirstChild(){
+    	      // nextSibling = c2;
+    	        return  (MyNode) c1;
+    	        }
+    	        
+    	       public MyNode getNextSibling(){
+    	    	   //nextSibling=null;
+    	            return (MyNode) c2;
+    	            }
+    	};
+
+    	Node root = new MyNode(dummy4){
+
+    	   public String getNodeName(){
+    	            
+    	                return "a";
+    	     }
+    	   public MyNode getFirstChild(){
+    	        return (MyNode) B;
+    	    }
+    	};
+    	
+    	     try {
                 Document doc = buildDocument( "/home/neel/Downloads/test.xml" );
 
                 XPath xpath = XPathFactory.newInstance().newXPath();
@@ -34,7 +102,7 @@ public class TestXpath {
                 NodeList nodeList = (NodeList)xpath.evaluate( "//b/c", doc, XPathConstants.NODESET );
               for( int i = 0; i < nodeList.getLength(); i++ ){
                     //illustrating here how you can use a single node as your starting point, and just query below that.
-                    Node node = nodeList.item( 0 );
+                    Node node = nodeList.item( i);
                     System.out.println( xpath.evaluate( "@id", node, XPathConstants.STRING ) );
                 }
 
