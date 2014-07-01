@@ -29,7 +29,7 @@ public class TestXpath {
   	
   	    public short getNodeType()
   	    {
-				return Node.ELEMENT_NODE;
+				return Node.DOCUMENT_NODE;
 				
   	    }
   	    public String getNamespaceURI()
@@ -58,13 +58,18 @@ public class TestXpath {
   	    {
   	    	return "c1";
   	    }
+  	  public Node getNextSibling()
+  	  {
+		return c2;
+  		  
+  	  }
   	};
 
   	final static Node c2 = new ThrowExceptionNode(){
    	   
    	  public short getNodeType()
 	    {
-				return Node.ELEMENT_NODE;
+				return Node.DOCUMENT_NODE;
 	    	
 	    }
    	 public NamedNodeMap getAttributes()
@@ -94,6 +99,11 @@ public class TestXpath {
 	    {
 	    	return b;
 	    }
+     public Node getNextSibling()
+ 	  {
+		return null;
+ 		  
+ 	  }
    	};
 
 
@@ -105,7 +115,7 @@ public class TestXpath {
   	    	}
   		 public short getNodeType()
    	    {
-				return Node.ELEMENT_NODE;
+				return Node.DOCUMENT_NODE;
    	    	
    	    }
   		 public NamedNodeMap getAttributes()
@@ -140,8 +150,9 @@ public class TestXpath {
   	        
   	       public Node getNextSibling(){
   	    	   //nextSibling=null;
-  	            return  c2;
+  	            return  null;
   	            }
+  	     
   	};
 
   	static Node root = new ThrowExceptionNode(){
@@ -152,7 +163,7 @@ public class TestXpath {
   	     }
   	 public String getLocalName()
 	    {
-	    	return "a";
+	    	return null;
 	    }
   	 public NamedNodeMap getAttributes()
 	    {
@@ -167,7 +178,7 @@ public class TestXpath {
   	    }
   	   public short getNodeType()
  	    {
-				return Node.ELEMENT_NODE;
+				return Node.DOCUMENT_NODE;
  	    	
  	    }
   	 public Node getParentNode()
@@ -179,6 +190,11 @@ public class TestXpath {
 			return "a";
 	    	
 	    }
+  	  public Node getNextSibling()
+  	  {
+		return null;
+  		  
+  	  }
 	 
   	};
 	
@@ -199,7 +215,7 @@ public class TestXpath {
             */
     	     
     	   try {
-				NodeList nodelist=(NodeList)xpath.evaluate("//b",root,XPathConstants.NODESET);
+				NodeList nodelist=(NodeList)xpath.evaluate("//c1",root,XPathConstants.NODESET);
 				System.out.println(nodelist.getLength());
 				for(int i=0;i<nodelist.getLength();i++)
 				{
