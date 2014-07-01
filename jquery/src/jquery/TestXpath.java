@@ -19,101 +19,198 @@ import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
+//import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class TestXpath {
+	 final static Node c1 = new ThrowExceptionNode(){
+  	
+  	    public short getNodeType()
+  	    {
+				return Node.ELEMENT_NODE;
+				
+  	    }
+  	    public String getNamespaceURI()
+  	    {
+			return "a/b/c1";
+  	    	
+  	    }
+  	    public boolean hasChildNodes()
+  	    {
+  	    	return false;
+  	    }
+  	    public NamedNodeMap getAttributes()
+  	    {
+  	    	return null;
+  	    }
+  	 
+  	    public String getNodeName(){
+  	    
+  	        return "c1";
+  	    }
+  	    public Node getParentNode()
+  	    {
+  	    	return b;
+  	    }
+  	    public String getLocalName()
+  	    {
+  	    	return "c1";
+  	    }
+  	};
 
+  	final static Node c2 = new ThrowExceptionNode(){
+   	   
+   	  public short getNodeType()
+	    {
+				return Node.ELEMENT_NODE;
+	    	
+	    }
+   	 public NamedNodeMap getAttributes()
+	    {
+	    	return null;
+	    }
+   	 
+   	  public String getNamespaceURI()
+	    {
+			return "a/b/c2";
+	    	
+	    }
+   	public boolean hasChildNodes()
+	    {
+	    	return false;
+	    }
+	 
+   	public String getLocalName()
+	    {
+	    	return "c2";
+	    }
+   	    public String getNodeName(){
+   	    
+   	        return "c2";
+   	    }
+   	 public Node getParentNode()
+	    {
+	    	return b;
+	    }
+   	};
+
+
+  	final static Node b= new ThrowExceptionNode(){
+  		//Node nextsibling;
+  	   
+  		public String getNodeName(){ 
+  		   return "b";
+  	    	}
+  		 public short getNodeType()
+   	    {
+				return Node.ELEMENT_NODE;
+   	    	
+   	    }
+  		 public NamedNodeMap getAttributes()
+   	    {
+   	    	return null;
+   	    }
+  		  public String getNamespaceURI()
+    	    {
+  			return "a/b";
+    	    	
+    	    }
+  		public boolean hasChildNodes()
+  	    {
+  	    	return true;
+  	    }
+  		public String getLocalName()
+  	    {
+  	    	return "b";
+  	    }
+    	 
+  	    
+  	//    Node nextSibling = null;
+  		public Node getParentNode()
+  	    {
+  	    	return root;
+  	    }
+  	    
+  	    public ThrowExceptionNode getFirstChild(){
+  	      // nextSibling = c2;
+  	        return  (ThrowExceptionNode) c1;
+  	        }
+  	        
+  	       public Node getNextSibling(){
+  	    	   //nextSibling=null;
+  	            return  c2;
+  	            }
+  	};
+
+  	static Node root = new ThrowExceptionNode(){
+
+  	   public String getNodeName(){
+  	            
+  	                return "a";
+  	     }
+  	 public String getLocalName()
+	    {
+	    	return "a";
+	    }
+  	 public NamedNodeMap getAttributes()
+	    {
+	    	return null;
+	    }
+  	public boolean hasChildNodes()
+	    {
+	    	return true;
+	    }
+  	   public ThrowExceptionNode getFirstChild(){
+  	        return (ThrowExceptionNode) b;
+  	    }
+  	   public short getNodeType()
+ 	    {
+				return Node.ELEMENT_NODE;
+ 	    	
+ 	    }
+  	 public Node getParentNode()
+	    {
+	    	return null;
+	    }
+  	  public String getNamespaceURI()
+	    {
+			return "a";
+	    	
+	    }
+	 
+  	};
+	
     public static void main(String[] args) {
-    	Node dummy1 = null,dummy2 = null,dummy3=null,dummy4=null;
-    	 final Node c1 = new MyNode(dummy1){
-    	   boolean getHasChildren(){
-    	        return false;
-    	        }
-    	    
-    	   public NamedNodeMap getAttributes(){
-    	    
-    	        //return the ID attribute
-    		   return null; 
-    	    }
-    	    
-    	    String getName(){
-    	    
-    	        return "c1";
-    	    }
-    	};
-
-    	final Node c2 = new MyNode(dummy2){
-     	   boolean getHasChildren(){
-     	        return false;
-     	        }
-     	    
-     	   public NamedNodeMap getAttributes(){
-     	    
-     	        //return the ID attribute
-     		   return null; 
-     	    }
-     	    
-     	    public String getNodeName(){
-     	    
-     	        return "c2";
-     	    }
-     	};
-
-
-    	final Node B = new MyNode(dummy3){
-    		//MyNode nextsibling;
-    	   
-    		public String getNodeName(){ 
-    		   return "B";
-    	    	}
-    	    
-    	    
-    	//    Node nextSibling = null;
-    	    
-    	    public MyNode getFirstChild(){
-    	      // nextSibling = c2;
-    	        return  (MyNode) c1;
-    	        }
-    	        
-    	       public MyNode getNextSibling(){
-    	    	   //nextSibling=null;
-    	            return (MyNode) c2;
-    	            }
-    	};
-
-    	Node root = new MyNode(dummy4){
-
-    	   public String getNodeName(){
-    	            
-    	                return "a";
-    	     }
-    	   public MyNode getFirstChild(){
-    	        return (MyNode) B;
-    	    }
-    	};
+    	//Node dummy1 = null,dummy2 = null,dummy3=null,dummy4=null;
     	
-    	     try {
-                Document doc = buildDocument( "/home/neel/Downloads/test.xml" );
-
-                XPath xpath = XPathFactory.newInstance().newXPath();
-                //below we start with an initial XPath expression that gets a list of nodes, basically all "nodes with name 'c'"
-                NodeList nodeList = (NodeList)xpath.evaluate( "//b/c", doc, XPathConstants.NODESET );
-              for( int i = 0; i < nodeList.getLength(); i++ ){
-                    //illustrating here how you can use a single node as your starting point, and just query below that.
-                    Node node = nodeList.item( i);
-                    System.out.println( xpath.evaluate( "@id", node, XPathConstants.STRING ) );
-                }
-
-                //learned everything I know about xpath from here: http://www.w3schools.com/XPath/
-                //Note: these java interfaces support XPATH 1.0 only.
-
-
-            } catch (ParserConfigurationException | SAXException | IOException | XPathExpressionException e) {
-                e.printStackTrace();
-            }
-
+    	
+    	     XPath xpath = XPathFactory.newInstance().newXPath();
+            /*
+			// below we start with an initial XPath expression that gets a list of nodes, basically all "nodes with name 'c'"
+           
+           NodeList nodeList = (NodeList)xpath.evaluate( "//b/c", doc, XPathConstants.NODESET );
+           for( int i = 0; i < nodeList.getLength(); i++ ){
+			  //illustrating here how you can use a single node as your starting point, and just query below that.
+			  Node node = nodeList.item( i);
+			  System.out.println( xpath.evaluate( "@id", node, XPathConstants.STRING ) );
+			  
+            */
+    	     
+    	   try {
+				NodeList nodelist=(NodeList)xpath.evaluate("//b",root,XPathConstants.NODESET);
+				System.out.println(nodelist.getLength());
+				for(int i=0;i<nodelist.getLength();i++)
+				{
+					
+					Node node=nodelist.item(i);
+					
+					System.out.println(node.getNodeName());
+				}
+			} catch (XPathExpressionException e) {
+				e.printStackTrace();
+			}
 
     }
 
