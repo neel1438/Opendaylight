@@ -18,13 +18,13 @@ import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
 
-//import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class TestXpath {
-	/* final static Node c1 = new ThrowExceptionNode(){
+	 final static Node c1 = new ThrowExceptionNode(){
   	
   	    public short getNodeType()
   	    {
@@ -196,7 +196,7 @@ public class TestXpath {
   	  }
 	 
   	};
-	*/
+	
     public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
     
     	
@@ -209,7 +209,7 @@ public class TestXpath {
     		   Node doc1=ConstructXml.getDoc();
     		 
     		   
-    		   NodeList nodelist=(NodeList)xpath.evaluate("//b/*",doc,XPathConstants.NODESET);
+    		   NodeList nodelist=(NodeList)xpath.evaluate("//a",doc,XPathConstants.NODESET);
     		 	
 				System.out.println(nodelist.getLength());
 				for(int i = 0;i<nodelist.getLength();i++)
@@ -220,7 +220,7 @@ public class TestXpath {
 					System.out.println(node.getNodeName());
 				}
 				System.out.println("--------------------------------");
-				 NodeList nodeList=(NodeList)xpath.evaluate("//b/*",doc1,XPathConstants.NODESET);
+				 NodeList nodeList=(NodeList)xpath.evaluate("//a",doc1,XPathConstants.NODESET);
 					System.out.println(nodeList.getLength());
 					for(int i=0;i<nodeList.getLength();i++)
 					{
