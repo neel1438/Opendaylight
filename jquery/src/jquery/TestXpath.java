@@ -198,43 +198,49 @@ public class TestXpath {
 	 
   	};
 	
-    public static void main(String[] args) {
-    	//Node dummy1 = null,dummy2 = null,dummy3=null,dummy4=null;
+    public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
+    
     	
     	
     	     XPath xpath = XPathFactory.newInstance().newXPath();
-            /*
-			// below we start with an initial XPath expression that gets a list of nodes, basically all "nodes with name 'c'"
            
-           NodeList nodeList = (NodeList)xpath.evaluate( "//b/c", doc, XPathConstants.NODESET );
-           for( int i = 0; i < nodeList.getLength(); i++ ){
-			  //illustrating here how you can use a single node as your starting point, and just query below that.
-			  Node node = nodeList.item( i);
-			  System.out.println( xpath.evaluate( "@id", node, XPathConstants.STRING ) );
-			  
-            */
-    	     
     	   try {
-				NodeList nodelist=(NodeList)xpath.evaluate("//c1",root,XPathConstants.NODESET);
+    		   Document doc= buildDocument("/home/neel/Downloads/test.xml");
+    		   new ConstructXml();
+    		   Node doc1=ConstructXml.getDoc();
+    		 
+    		   
+    		   NodeList nodelist=(NodeList)xpath.evaluate("//b/*",doc,XPathConstants.NODESET);
+    		 	
 				System.out.println(nodelist.getLength());
-				for(int i=0;i<nodelist.getLength();i++)
+				for(int i = 0;i<nodelist.getLength();i++)
 				{
 					
 					Node node=nodelist.item(i);
 					
 					System.out.println(node.getNodeName());
 				}
+				System.out.println("--------------------------------");
+				 NodeList nodeList=(NodeList)xpath.evaluate("//b/*",doc1,XPathConstants.NODESET);
+					System.out.println(nodeList.getLength());
+					for(int i=0;i<nodeList.getLength();i++)
+					{
+						
+						Node node=nodeList.item(i);
+						
+						System.out.println(node.getNodeName());
+					}
 			} catch (XPathExpressionException e) {
 				e.printStackTrace();
 			}
 
     }
 
-    public static MyDocument buildDocument( String file ) throws ParserConfigurationException, SAXException, IOException{
+    public static Document buildDocument( String file ) throws ParserConfigurationException, SAXException, IOException{
         DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document doc = dBuilder.parse(file);
         doc.normalizeDocument();
-        return new MyDocument(doc);
+        return doc;
     }
 
 }
