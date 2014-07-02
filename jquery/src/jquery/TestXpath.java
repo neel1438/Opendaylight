@@ -6,7 +6,6 @@
 * and is available at http://www.eclipse.org/legal/epl-v10.html
 */
 package jquery;
-
 import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -18,14 +17,14 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
+
 //import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class TestXpath {
-	 final static Node c1 = new ThrowExceptionNode(){
+	/* final static Node c1 = new ThrowExceptionNode(){
   	
   	    public short getNodeType()
   	    {
@@ -197,7 +196,7 @@ public class TestXpath {
   	  }
 	 
   	};
-	
+	*/
     public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
     
     	
@@ -205,7 +204,7 @@ public class TestXpath {
     	     XPath xpath = XPathFactory.newInstance().newXPath();
            
     	   try {
-    		   Document doc= buildDocument("/home/neel/Downloads/test.xml");
+    		   Document doc= buildDocument("src/jquery/resources/test.xml");
     		   new ConstructXml();
     		   Node doc1=ConstructXml.getDoc();
     		 
