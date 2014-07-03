@@ -206,28 +206,31 @@ public class TestXpath {
     	   try {
     		   Document doc= buildDocument("src/jquery/resources/test.xml");
     		   new ConstructXml();
-    		   Node doc1=ConstructXml.getDoc();
+    		 //  Node doc1=ConstructXml.getDoc();
     		 
     		   
     		   NodeList nodelist=(NodeList)xpath.evaluate("//a",doc,XPathConstants.NODESET);
     		 	
-				System.out.println(nodelist.getLength());
+				//System.out.println(nodelist.getLength());
+				System.out.println(doc.getFirstChild().getNodeValue());
+				
 				for(int i = 0;i<nodelist.getLength();i++)
 				{
 					
-					Node node=nodelist.item(i);
+					//Node node=nodelist.item(i);
 					
-					System.out.println(node.getNodeName());
+				//	System.out.println(node.getNodeName());
 				}
 				System.out.println("--------------------------------");
-				 NodeList nodeList=(NodeList)xpath.evaluate("//a",doc1,XPathConstants.NODESET);
-					System.out.println(nodeList.getLength());
+				 NodeList nodeList=(NodeList)xpath.evaluate("/",HardCodedNodeBuilder.root,XPathConstants.NODESET);
+					//System.out.println(nodeList.getLength());
+					System.out.println(HardCodedNodeBuilder.root.getFirstChild().getNodeName());
 					for(int i=0;i<nodeList.getLength();i++)
 					{
 						
-						Node node=nodeList.item(i);
+					//	Node node=nodeList.item(i);
 						
-						System.out.println(node.getNodeName());
+					//	System.out.println(node.getNodeName());
 					}
 			} catch (XPathExpressionException e) {
 				e.printStackTrace();
