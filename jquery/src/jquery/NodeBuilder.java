@@ -1,5 +1,6 @@
 package jquery;
 
+import org.w3c.dom.DOMException;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
@@ -17,7 +18,7 @@ public class NodeBuilder extends ThrowExceptionNode{
 	Node LastChild;
 	String NodeValue;
 
-	
+
 	public NodeBuilder(String Name,short Type,String Nodevalue,boolean hasattributes,NamedNodeMap attributes,String Local,String NameSpaceURI,Node parent,Node nextsibling,Boolean haschildren,Node getFirst,Node getLast)
 	{
 		NodeName=Name;
@@ -32,7 +33,7 @@ public class NodeBuilder extends ThrowExceptionNode{
 		hasChildren=haschildren;
 		FirstChild=getFirst;
 		LastChild=getLast;
-		
+
 	}
 
 	public short getNodeType() {
@@ -77,5 +78,16 @@ public class NodeBuilder extends ThrowExceptionNode{
 	public Node getLastChild() {
 
 		return LastChild;
+	}
+
+	@Override
+	public String getNodeValue() throws DOMException {
+	    return NodeValue;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+	    //add code to compare for equality
+	    return false;
 	}
 }

@@ -51,7 +51,7 @@ public class Testcases {
         assertEquals(1, nodelist.getLength());
         Node root = nodelist.item(0);
         assertNotNull(root);
-        assertEquals("a", root.getNodeName());
+        assertEquals("a", root.getFirstChild().getNodeName());
 
     }
 
