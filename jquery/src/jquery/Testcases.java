@@ -16,7 +16,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-//import org.xml.sax.SAXException;
 
 public class Testcases {
     Node rootTestNode;
@@ -51,7 +50,7 @@ public class Testcases {
         assertEquals(1, nodelist.getLength());
         Node root = nodelist.item(0);
         assertNotNull(root);
-        assertEquals("a", root.getFirstChild().getNodeName());
+        assertEquals("a", root.getNodeName());
 
     }
 

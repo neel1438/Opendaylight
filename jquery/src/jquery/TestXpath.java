@@ -18,184 +18,13 @@ import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
 
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
+
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
+/*
+ * This class is just to do random tests and play around with Nodes
+ */
 public class TestXpath {
-	 final static Node c1 = new ThrowExceptionNode(){
-  	
-  	    public short getNodeType()
-  	    {
-				return Node.DOCUMENT_NODE;
-				
-  	    }
-  	    public String getNamespaceURI()
-  	    {
-			return "a/b/c1";
-  	    	
-  	    }
-  	    public boolean hasChildNodes()
-  	    {
-  	    	return false;
-  	    }
-  	    public NamedNodeMap getAttributes()
-  	    {
-  	    	return null;
-  	    }
-  	 
-  	    public String getNodeName(){
-  	    
-  	        return "c1";
-  	    }
-  	    public Node getParentNode()
-  	    {
-  	    	return b;
-  	    }
-  	    public String getLocalName()
-  	    {
-  	    	return "c1";
-  	    }
-  	  public Node getNextSibling()
-  	  {
-		return c2;
-  		  
-  	  }
-  	};
-
-  	final static Node c2 = new ThrowExceptionNode(){
-   	   
-   	  public short getNodeType()
-	    {
-				return Node.DOCUMENT_NODE;
-	    	
-	    }
-   	 public NamedNodeMap getAttributes()
-	    {
-	    	return null;
-	    }
-   	 
-   	  public String getNamespaceURI()
-	    {
-			return "a/b/c2";
-	    	
-	    }
-   	public boolean hasChildNodes()
-	    {
-	    	return false;
-	    }
-	 
-   	public String getLocalName()
-	    {
-	    	return "c2";
-	    }
-   	    public String getNodeName(){
-   	    
-   	        return "c2";
-   	    }
-   	 public Node getParentNode()
-	    {
-	    	return b;
-	    }
-     public Node getNextSibling()
- 	  {
-		return null;
- 		  
- 	  }
-   	};
-
-
-  	final static Node b= new ThrowExceptionNode(){
-  		//Node nextsibling;
-  	   
-  		public String getNodeName(){ 
-  		   return "b";
-  	    	}
-  		 public short getNodeType()
-   	    {
-				return Node.DOCUMENT_NODE;
-   	    	
-   	    }
-  		 public NamedNodeMap getAttributes()
-   	    {
-   	    	return null;
-   	    }
-  		  public String getNamespaceURI()
-    	    {
-  			return "a/b";
-    	    	
-    	    }
-  		public boolean hasChildNodes()
-  	    {
-  	    	return true;
-  	    }
-  		public String getLocalName()
-  	    {
-  	    	return "b";
-  	    }
-    	 
-  	    
-  	//    Node nextSibling = null;
-  		public Node getParentNode()
-  	    {
-  	    	return root;
-  	    }
-  	    
-  	    public ThrowExceptionNode getFirstChild(){
-  	      // nextSibling = c2;
-  	        return  (ThrowExceptionNode) c1;
-  	        }
-  	        
-  	       public Node getNextSibling(){
-  	    	   //nextSibling=null;
-  	            return  null;
-  	            }
-  	     
-  	};
-
-  	static Node root = new ThrowExceptionNode(){
-
-  	   public String getNodeName(){
-  	            
-  	                return "a";
-  	     }
-  	 public String getLocalName()
-	    {
-	    	return null;
-	    }
-  	 public NamedNodeMap getAttributes()
-	    {
-	    	return null;
-	    }
-  	public boolean hasChildNodes()
-	    {
-	    	return true;
-	    }
-  	   public ThrowExceptionNode getFirstChild(){
-  	        return (ThrowExceptionNode) b;
-  	    }
-  	   public short getNodeType()
- 	    {
-				return Node.DOCUMENT_NODE;
- 	    	
- 	    }
-  	 public Node getParentNode()
-	    {
-	    	return null;
-	    }
-  	  public String getNamespaceURI()
-	    {
-			return "a";
-	    	
-	    }
-  	  public Node getNextSibling()
-  	  {
-		return null;
-  		  
-  	  }
-	 
-  	};
 	
     public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
     
@@ -209,10 +38,10 @@ public class TestXpath {
     		 //  Node doc1=ConstructXml.getDoc();
     		 
     		   
-    		   NodeList nodelist=(NodeList)xpath.evaluate("//a",doc,XPathConstants.NODESET);
+    		   NodeList nodelist=(NodeList)xpath.evaluate("//c1",doc,XPathConstants.NODESET);
     		 	
 				//System.out.println(nodelist.getLength());
-				System.out.println(doc.getFirstChild().getNodeValue());
+				System.out.println(nodelist.item(0).getFirstChild());
 				
 				for(int i = 0;i<nodelist.getLength();i++)
 				{
@@ -224,7 +53,7 @@ public class TestXpath {
 				System.out.println("--------------------------------");
 				 NodeList nodeList=(NodeList)xpath.evaluate("/",new HardCodedNodeBuilder().root,XPathConstants.NODESET);
 					//System.out.println(nodeList.getLength());
-					System.out.println(new HardCodedNodeBuilder().root.getFirstChild().getNodeName());
+					System.out.println(new HardCodedNodeBuilder().root.getFirstChild());
 					for(int i=0;i<nodeList.getLength();i++)
 					{
 						
@@ -242,7 +71,7 @@ public class TestXpath {
         DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document doc = dBuilder.parse(file);
         doc.normalizeDocument();
-        System.out.println(dBuilder.getDOMImplementation());
+      //  System.out.println(dBuilder.getDOMImplementation());
         return doc;
     }
 

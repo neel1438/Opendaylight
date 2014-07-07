@@ -9,7 +9,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-
+/*
+ * This is to play around with nodes using junit
+ * random tests
+ */
 public class TestXml {
 	Node RealXmlRoot;
 	Node HardCodedRoot;
@@ -42,7 +45,7 @@ public class TestXml {
 		 * 
 		 */
 		//get First Children
-		//assertEquals(RealXmlRoot.getFirstChild(),HardCodedRoot.getFirstChild());
+		assertEquals(RealXmlRoot.getFirstChild(),HardCodedRoot.getFirstChild());
 		
 		
 
