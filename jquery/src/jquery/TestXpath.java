@@ -222,9 +222,9 @@ public class TestXpath {
 				//	System.out.println(node.getNodeName());
 				}
 				System.out.println("--------------------------------");
-				 NodeList nodeList=(NodeList)xpath.evaluate("/",HardCodedNodeBuilder.root,XPathConstants.NODESET);
+				 NodeList nodeList=(NodeList)xpath.evaluate("/",new HardCodedNodeBuilder().root,XPathConstants.NODESET);
 					//System.out.println(nodeList.getLength());
-					System.out.println(HardCodedNodeBuilder.root.getFirstChild().getNodeName());
+					System.out.println(new HardCodedNodeBuilder().root.getFirstChild().getNodeName());
 					for(int i=0;i<nodeList.getLength();i++)
 					{
 						
@@ -242,6 +242,7 @@ public class TestXpath {
         DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document doc = dBuilder.parse(file);
         doc.normalizeDocument();
+        System.out.println(dBuilder.getDOMImplementation());
         return doc;
     }
 

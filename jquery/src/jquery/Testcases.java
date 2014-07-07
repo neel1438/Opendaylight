@@ -40,7 +40,7 @@ public class Testcases {
 
     public void setupHardcodedNode() {
         //
-        rootTestNode = HardCodedNodeBuilder.root;
+        rootTestNode =new HardCodedNodeBuilder().root;
     }
 
     @Test
