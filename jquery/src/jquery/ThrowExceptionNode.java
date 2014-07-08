@@ -1,17 +1,15 @@
 package jquery;
 
-import org.w3c.dom.Attr;
+
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.TypeInfo;
+
 import org.w3c.dom.UserDataHandler;
 
-public class ThrowExceptionNode implements Element{
-
+public class ThrowExceptionNode implements Node {
 	@Override
 	public String getNodeName() {
 		throw new RuntimeException( "Not Implemented" );
@@ -20,6 +18,7 @@ public class ThrowExceptionNode implements Element{
 	@Override
 	public String getNodeValue() throws DOMException {
 		throw new RuntimeException( "Not Implemented" );
+		
 	}
 
 	@Override
@@ -105,7 +104,7 @@ public class ThrowExceptionNode implements Element{
 
 	@Override
 	public void normalize() {
-		throw new RuntimeException( "Not Implemented" );
+		throw new RuntimeException( "Not Implemented" );		
 	}
 
 	@Override
@@ -125,7 +124,7 @@ public class ThrowExceptionNode implements Element{
 
 	@Override
 	public void setPrefix(String prefix) throws DOMException {
-		throw new RuntimeException( "Not Implemented" );
+		throw new RuntimeException( "Not Implemented" );		
 	}
 
 	@Override
@@ -154,7 +153,7 @@ public class ThrowExceptionNode implements Element{
 
 	@Override
 	public void setTextContent(String textContent) throws DOMException {
-		throw new RuntimeException( "Not Implemented" );
+		throw new RuntimeException( "Not Implemented" );		
 	}
 
 	@Override
@@ -196,113 +195,4 @@ public class ThrowExceptionNode implements Element{
 	public Object getUserData(String key) {
 		throw new RuntimeException( "Not Implemented" );
 	}
-
-    @Override
-    public String getTagName() {
-        throw new RuntimeException( "Not Implemented" );
-    }
-
-    @Override
-    public String getAttribute(String name) {
-        throw new RuntimeException( "Not Implemented" );
-    }
-
-    @Override
-    public void setAttribute(String name, String value) throws DOMException {
-        throw new RuntimeException( "Not Implemented" );
-    }
-
-    @Override
-    public void removeAttribute(String name) throws DOMException {
-        throw new RuntimeException( "Not Implemented" );
-    }
-
-    @Override
-    public Attr getAttributeNode(String name) {
-        throw new RuntimeException( "Not Implemented" );
-    }
-
-    @Override
-    public Attr setAttributeNode(Attr newAttr) throws DOMException {
-        throw new RuntimeException( "Not Implemented" );
-    }
-
-    @Override
-    public Attr removeAttributeNode(Attr oldAttr) throws DOMException {
-        throw new RuntimeException( "Not Implemented" );
-    }
-
-    @Override
-    public NodeList getElementsByTagName(String name) {
-        throw new RuntimeException( "Not Implemented" );
-    }
-
-    @Override
-    public String getAttributeNS(String namespaceURI, String localName)
-            throws DOMException {
-        throw new RuntimeException( "Not Implemented" );
-    }
-
-    @Override
-    public void setAttributeNS(String namespaceURI, String qualifiedName,
-            String value) throws DOMException {
-        throw new RuntimeException( "Not Implemented" );
-    }
-
-    @Override
-    public void removeAttributeNS(String namespaceURI, String localName)
-            throws DOMException {
-        throw new RuntimeException( "Not Implemented" );
-    }
-
-    @Override
-    public Attr getAttributeNodeNS(String namespaceURI, String localName)
-            throws DOMException {
-        throw new RuntimeException( "Not Implemented" );
-    }
-
-    @Override
-    public Attr setAttributeNodeNS(Attr newAttr) throws DOMException {
-        throw new RuntimeException( "Not Implemented" );
-    }
-
-    @Override
-    public NodeList getElementsByTagNameNS(String namespaceURI, String localName)
-            throws DOMException {
-        throw new RuntimeException( "Not Implemented" );
-    }
-
-    @Override
-    public boolean hasAttribute(String name) {
-        throw new RuntimeException( "Not Implemented" );
-    }
-
-    @Override
-    public boolean hasAttributeNS(String namespaceURI, String localName)
-            throws DOMException {
-        throw new RuntimeException( "Not Implemented" );
-    }
-
-    @Override
-    public TypeInfo getSchemaTypeInfo() {
-        throw new RuntimeException( "Not Implemented" );
-    }
-
-    @Override
-    public void setIdAttribute(String name, boolean isId) throws DOMException {
-        throw new RuntimeException( "Not Implemented" );
-    }
-
-    @Override
-    public void setIdAttributeNS(String namespaceURI, String localName,
-            boolean isId) throws DOMException {
-        throw new RuntimeException( "Not Implemented" );
-    }
-
-    @Override
-    public void setIdAttributeNode(Attr idAttr, boolean isId)
-            throws DOMException {
-        throw new RuntimeException( "Not Implemented" );
-    }
-
 }

@@ -3,7 +3,7 @@ package jquery;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-public class NodeBuilder extends ThrowExceptionNode{
+public class NodeBuilderElement extends ThrowExceptionElement{
 	short NodeType;
 	String NamespaceURI;
 	boolean hasChildren;
@@ -19,7 +19,7 @@ public class NodeBuilder extends ThrowExceptionNode{
 	String TextContent;
 
 	
-	public NodeBuilder(String Name,short Type,String Nodevalue,String Textcontent,boolean hasattributes,NamedNodeMap attributes,String Local,String NameSpaceURI,Node parent,Node nextsibling,Boolean haschildren,Node getFirst,Node getLast)
+	public NodeBuilderElement(String Name,short Type,String Nodevalue,String Textcontent,boolean hasattributes,NamedNodeMap attributes,String Local,String NameSpaceURI,Node parent,Node nextsibling,Boolean haschildren,Node getFirst,Node getLast)
 	{
 		NodeName=Name;
 		NodeType=Type;
@@ -46,7 +46,6 @@ public class NodeBuilder extends ThrowExceptionNode{
 		return NamespaceURI;
 
 	}
-
 	public String getNodeValue()
 	{
 		return NodeValue;

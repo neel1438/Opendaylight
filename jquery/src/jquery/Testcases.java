@@ -16,6 +16,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+//import org.xml.sax.SAXException;
 
 public class Testcases {
     Node rootTestNode;
@@ -24,8 +25,9 @@ public class Testcases {
     @Before
     public void setup() throws Exception {
         xpath = XPathFactory.newInstance().newXPath();
-        // setupRealXml();
+       // setupRealXml();
         setupHardcodedNode();
+       // rootTestNode = new MyNode( rootTestNode );
         System.out.println("Initialized!");
     }
 
@@ -35,11 +37,15 @@ public class Testcases {
         doc.normalizeDocument();
         rootTestNode = ((NodeList) xpath.evaluate("//a", doc, XPathConstants.NODESET)).item(0);
 
+        //our "a" node that we hardcoded doesn't have a parent document, so simulate that here by
+        //removing "a" from the "document".
+      rootTestNode.getParentNode().removeChild( rootTestNode );
     }
 
     public void setupHardcodedNode() {
         //
-        rootTestNode =new HardCodedNodeBuilder().root;
+//        rootTestNode = HardCodedNodeBuilder.root;
+        rootTestNode = new HardCodedNodeBuilder().a;
     }
 
     @Test
@@ -59,6 +65,7 @@ public class Testcases {
 	 */
     public void evaluate(String xpathexp, String expectedValue) throws XPathExpressionException {
         String node = (String) xpath.evaluate(xpathexp, rootTestNode, XPathConstants.STRING);
+        System.out.println( "'" + node + "'" );
         assertEquals(expectedValue, node);
     }
 
@@ -110,7 +117,7 @@ public class Testcases {
         NodeList node = (NodeList) xpath.evaluate(xpathexp, rootTestNode, XPathConstants.NODESET);
 
         if( node.getLength() == 0 ){
-            builder.append( "No response" );
+            builder.append( "No response." );
         }
         for( int i = 0; i < node.getLength(); i++ ){
             String value = (String) xpath.evaluate( ".", node.item( i ), XPathConstants.STRING );
@@ -123,26 +130,33 @@ public class Testcases {
     }
 
     @Test
+    public void testBasicXPath() throws XPathExpressionException {
+        evaluate("name(.)", "a");
+    }
+
+    @Test
     public void simpleXPathTests() throws XPathExpressionException {
 
         // select node c1 whose text values is "Some Value"
-        evaluate("//c1/text()", "Some Value");
+        evaluate("count(//c1)", "1");
+        evaluate("//c1", "Some Value");
 
         // get the nodes whose text values is "Some Value" (Comparing names)
-        evaluate("name(//*[(text()='Some Value')])", "c1");
+        evaluate("name(//*[text()[.='Some Value']])", "c1");
 
         // count all the nodes whose text contains the value "Some"
-        evaluate("count(//*[contains(text(),'Some')])", "2");
+        evaluate("count(//*[text()[contains(.,'Some')]])", "2");
 
         // verify that c1 is the first node whose text contains the value "Some"
-        evaluate("name(//*[contains(text(),'Some')][1])", "c1");
+        evaluate("name((//*[text()[contains(., 'Some')]])[1])", "c1");
 
         // verify that c2 is the second node whose text contains the value
         // "Some"
-        evaluate("name(//*[contains(text(),'Some')][2])", "c2");
+        System.out.println( "--" );
+        evaluate("name((//*[text()[contains(., 'Some')]])[2])", "c2");
 
         // checking the same thing as above
-        evaluate("name(//*[contains(text(),'Some')][2])='c2'", "true");
+        evaluate("name((//*[text()[contains(., 'Some')]])[2])='c2'", "true");
 
     }
 
@@ -167,12 +181,18 @@ public class Testcases {
         evaluateExpectList( "//*[ * = 'Some Value']", "b" );
 
         //Get the next sibling of the node which has the value 'Some Value'
-        evaluateExpectList( "//*[ .='Some Value']/following-sibling::*", "c2" );
-
-        //Get the grandparent nodes, which have a descendant named 'c1'.
-        evaluateExpectList( "//*[.//*/*[name() = 'c1']]", "a" );
+        System.out.println( "--" );
+        evaluateExpectList( "descendant::*[text()[.='Some Value']]/following-sibling::*", "c2" );
 
         //Get all nodes, who have a descendant named 'c1'
-        evaluateExpectList( "//*[.//*[name() = 'c1']]", "a", "b" );
+        evaluateExpectList( "//*[.//*[name() = 'c1']]", "b" );
+
+        //Get the grandparent nodes, which have a descendant named 'c1'.
+        //this doesn't work when there is no "root" because //* matches all children of the root document.
+        //when we remove the root document, our root "a" because the true "root". This should work if there
+        //is a true "Root" document provided.
+        //evaluateExpectList( "//*[.//*/*[name() = 'c1']]", "a" );
+
+
     }
 }

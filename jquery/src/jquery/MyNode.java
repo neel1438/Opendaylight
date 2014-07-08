@@ -1,6 +1,7 @@
 package jquery;
 
 import org.w3c.dom.DOMException;
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -39,9 +40,9 @@ public class MyNode implements Node {
 	}
 
 	@Override
-	public MyNode getParentNode() {
+	public Node getParentNode() {
 		System.out.println("getParentNode()");
-		return new MyNode(node.getParentNode());
+		return node.getParentNode();
 	}
 
 	@Override
@@ -81,9 +82,9 @@ public class MyNode implements Node {
 	}
 
 	@Override
-	public MyDocument getOwnerDocument() {
+	public Document getOwnerDocument() {
 		System.out.println("getOwnerDocument");
-		return new MyDocument(node.getOwnerDocument());
+		return node.getOwnerDocument();
 	}
 
 	@Override
