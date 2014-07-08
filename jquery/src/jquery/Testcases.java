@@ -191,7 +191,7 @@ public class Testcases {
         //this doesn't work when there is no "root" because //* matches all children of the root document.
         //when we remove the root document, our root "a" because the true "root". This should work if there
         //is a true "Root" document provided.
-        //evaluateExpectList( "//*[.//*/*[name() = 'c1']]", "a" );
+        evaluateExpectList( "//*[.//*/*[name() = 'c1']]", "a" );
 
 
     }

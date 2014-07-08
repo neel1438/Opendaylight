@@ -4,30 +4,19 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 public class NodeBuilderElement extends ThrowExceptionElement{
-	short NodeType;
-	String NamespaceURI;
+	
 	boolean hasChildren;
-	boolean hasAttributes;
-	NamedNodeMap Attributes;
 	String NodeName;
 	Node Parent;
-	String LocalName;
 	Node NextSibling;
 	Node FirstChild;
 	Node LastChild;
-	String NodeValue;
 	String TextContent;
 
 	
-	public NodeBuilderElement(String Name,short Type,String Nodevalue,String Textcontent,boolean hasattributes,NamedNodeMap attributes,String Local,String NameSpaceURI,Node parent,Node nextsibling,Boolean haschildren,Node getFirst,Node getLast)
+	public NodeBuilderElement(String Name,String Textcontent,Node parent,Node nextsibling,Boolean haschildren,Node getFirst,Node getLast)
 	{
 		NodeName=Name;
-		NodeType=Type;
-		NamespaceURI=NameSpaceURI;
-		NodeValue=Nodevalue;
-		hasAttributes=hasattributes;
-		Attributes=attributes;
-		LocalName=Local;
 		Parent=parent;
 		NextSibling=nextsibling;
 		hasChildren=haschildren;
@@ -38,25 +27,28 @@ public class NodeBuilderElement extends ThrowExceptionElement{
 	}
 
 	public short getNodeType() {
-		return NodeType;
+		return Node.ELEMENT_NODE;
 
 	}
 
 	public String getNamespaceURI() {
-		return NamespaceURI;
+		return null;
 
 	}
 	public String getNodeValue()
 	{
-		return NodeValue;
+		return null;
 	}
 
 	public boolean hasChildNodes() {
 		return hasChildren;
 	}
-
+	public boolean hasAttributes()
+	{
+		return false;
+	}
 	public NamedNodeMap getAttributes() {
-		return Attributes;
+		return null;
 	}
 
 	public String getNodeName() {
@@ -69,7 +61,7 @@ public class NodeBuilderElement extends ThrowExceptionElement{
 	}
 
 	public String getLocalName() {
-		return LocalName;
+		return NodeName;
 	}
 
 	public Node getNextSibling() {

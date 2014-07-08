@@ -4,42 +4,26 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 public class NodeBuilderText extends ThrowExceptionText{
-	short NodeType;
-	String NamespaceURI;
-	boolean hasChildren;
-	boolean hasAttributes;
-	NamedNodeMap Attributes;
-	String NodeName;
 	Node Parent;
-	String LocalName;
 	Node NextSibling;
-	Node FirstChild;
-	Node LastChild;
 	String NodeValue;
-	String TextContent;
+	
 
 	
-	public NodeBuilderText(String Name,short Type,String Nodevalue,String Textcontent,boolean hasattributes,NamedNodeMap attributes,String Local,String NameSpaceURI,Node parent,Node nextsibling,Boolean haschildren,Node getFirst,Node getLast)
+	public NodeBuilderText(String Nodevalue,Node parent,Node nextsibling)
 	{
-		NodeName=Name;
-		NodeType=Type;
-		NamespaceURI=NameSpaceURI;
 		NodeValue=Nodevalue;
-		hasAttributes=hasattributes;
-		Attributes=attributes;
-		LocalName=Local;
 		Parent=parent;
 		NextSibling=nextsibling;
-		hasChildren=haschildren;
-		FirstChild=getFirst;
-		LastChild=getLast;
-		TextContent=Textcontent;
-		
 	}
 
 	public short getNodeType() {
-		return NodeType;
+		return Node.TEXT_NODE;
 
+	}
+	public boolean hasAttributes()
+	{
+		return false;
 	}
 	public String getNodeValue()
 	{
@@ -47,21 +31,21 @@ public class NodeBuilderText extends ThrowExceptionText{
 	}
 
 	public String getNamespaceURI() {
-		return NamespaceURI;
+		return null;
 
 	}
 
 	public boolean hasChildNodes() {
-		return hasChildren;
+		return false;
 	}
 
 	public NamedNodeMap getAttributes() {
-		return Attributes;
+		return null;
 	}
 
 	public String getNodeName() {
 
-		return NodeName;
+		return "#text";
 	}
 
 	public Node getParentNode() {
@@ -69,7 +53,7 @@ public class NodeBuilderText extends ThrowExceptionText{
 	}
 
 	public String getLocalName() {
-		return LocalName;
+		return "#text";
 	}
 
 	public Node getNextSibling() {
@@ -77,16 +61,16 @@ public class NodeBuilderText extends ThrowExceptionText{
 	}
 	public Node getFirstChild() {
 
-		return FirstChild;
+		return null;
 	}
 
 	public Node getLastChild() {
 
-		return LastChild;
+		return null;
 	}
 	public String getTextContent()
 	{
-		return TextContent;
+		return NodeValue;
 		
 	}
 }

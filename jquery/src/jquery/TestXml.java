@@ -34,7 +34,7 @@ public class TestXml {
 		assertEquals(RealXmlRoot.getNodeName(),HardCodedRoot.getNodeName());
 		
 		//get FirstChildren Name
-		assertEquals(RealXmlRoot.getFirstChild().getNodeName(),HardCodedRoot.getFirstChild().getNodeName());
+		assertEquals(RealXmlRoot.getFirstChild().getFirstChild().getNextSibling().getNodeName(),HardCodedRoot.getFirstChild().getFirstChild().getNextSibling().getNodeName());
 		
 		
 		/*
