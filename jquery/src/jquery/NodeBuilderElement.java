@@ -84,7 +84,7 @@ public class NodeBuilderElement extends ThrowExceptionElement{
 		return textContent;
 		
 	}
-	public void setChildren(Node[] childNodes)
+	public void setChildren(Node... childNodes)
 	{
 		hasChildren=true;
 		firstChild=childNodes[0];

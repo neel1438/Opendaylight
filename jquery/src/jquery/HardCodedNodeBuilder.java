@@ -16,19 +16,14 @@ public class HardCodedNodeBuilder {
 
 		NodeBuilderElement c2 = new NodeBuilderElement("c2","Some Other Value",b,null);
 		NodeBuilderText textc2 = new NodeBuilderText("Some Other Value",c2,null);
-		Node[] c2Children={textc2};
-		c2.setChildren(c2Children);
+		c2.setChildren(textc2);
 		
 		NodeBuilderElement c1 = new NodeBuilderElement("c1","Some Value",b,c2);
 		NodeBuilderText textc1 = new NodeBuilderText("Some Value",c1,null);
-		Node[] c1Children = {textc1};
-		c1.setChildren(c1Children);
 		
-		Node[] bChildren={c1,c2};
-		b.setChildren(bChildren);
-		
-		Node[] aChildren={b};
-		temp_a.setChildren(aChildren);
+		c1.setChildren(textc1);
+		b.setChildren(c1,c2);
+		temp_a.setChildren(b);
 		a=temp_a;
 	}
 	
