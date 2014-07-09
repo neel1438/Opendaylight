@@ -27,30 +27,45 @@ import org.xml.sax.SAXException;
  */
 public class TestXpath {
 
+	private static void printNote(NodeList nodeList) {
+		for (int count = 0; count < nodeList.getLength(); count++) {
+			Node tempNode = nodeList.item(count);
+			// get node name and value
+			System.out.println("\nNode Name =" + tempNode.getNodeName()
+					+ " [OPEN]");
+			// System.out.println("Node Value =" + tempNode.getTextContent());
+			if (tempNode.hasChildNodes()) {
+				// loop again if has child nodes
+				printNote(tempNode.getChildNodes());
+			}
+			System.out.println("Node Name =" + tempNode.getNodeName()
+					+ " [CLOSE]");
+		}
+	}
+
 	public static void main(String[] args) throws ParserConfigurationException,
 			SAXException, IOException {
 
 		XPath xpath = XPathFactory.newInstance().newXPath();
 
 		try {
-			/*Document doc = buildDocument("src/jquery/resources/test.xml");
-
-			NodeList nodelist = (NodeList) xpath.evaluate("//b/*",
-					doc.getFirstChild(), XPathConstants.NODESET);
-
-			// System.out.println(nodelist.getLength());
-			// System.out.println(nodelist.item(0).getTextContent());
-
-			for (int i = 0; i < nodelist.getLength(); i++) {
-
-				Node node = nodelist.item(i);
-
-				System.out.println(node.getNodeName());
-			}
-			System.out.println("--------------------------------");*/
+			Document doc = buildDocument("src/jquery/resources/test.xml");
 			
-			
-			
+			  NodeList nodelist = (NodeList) xpath.evaluate("//b/*",
+			  doc.getFirstChild(), XPathConstants.NODESET);
+			  
+			  // System.out.println(nodelist.getLength()); //
+			  System.out.println(nodelist.item(0).getTextContent());
+			  
+			  for (int i = 0; i < nodelist.getLength(); i++) {
+			  
+			  Node node = nodelist.item(i);
+			  
+			  System.out.println(node.getNodeName()); }
+			 
+
+			printNote(doc.getChildNodes());
+			System.out.println("--------------------------------");
 			NodeList nodeList = (NodeList) xpath.evaluate("//*",
 					new HardCodedNodeBuilder().a, XPathConstants.NODESET);
 			System.out.println(nodeList.getLength());
@@ -61,6 +76,7 @@ public class TestXpath {
 				Node node = nodeList.item(i);
 
 				System.out.println(node.getNodeName());
+
 			}
 		} catch (XPathExpressionException e) {
 			e.printStackTrace();

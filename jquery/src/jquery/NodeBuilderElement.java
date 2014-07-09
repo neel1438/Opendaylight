@@ -1,28 +1,31 @@
 package jquery;
 
+
+
+
+
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 public class NodeBuilderElement extends ThrowExceptionElement{
 	
 	boolean hasChildren;
-	String NodeName;
-	Node Parent;
-	Node NextSibling;
-	Node FirstChild;
-	Node LastChild;
-	String TextContent;
+	String nodeName;
+	Node parent;
+	Node nextSibling;
+	Node firstChild;
+	Node lastChild;
+	String textContent;
+	Node[] children;
 
 	
-	public NodeBuilderElement(String Name,String Textcontent,Node parent,Node nextsibling,Boolean haschildren,Node getFirst,Node getLast)
+	public NodeBuilderElement(String Name,String Textcontent,Node parentNode,Node nextsibling)
 	{
-		NodeName=Name;
-		Parent=parent;
-		NextSibling=nextsibling;
-		hasChildren=haschildren;
-		FirstChild=getFirst;
-		LastChild=getLast;
-		TextContent=Textcontent;
+		nodeName=Name;
+		parent=parentNode;
+		nextSibling=nextsibling;
+		textContent=Textcontent;
+		
 		
 	}
 
@@ -53,32 +56,40 @@ public class NodeBuilderElement extends ThrowExceptionElement{
 
 	public String getNodeName() {
 
-		return NodeName;
+		return nodeName;
 	}
 
 	public Node getParentNode() {
-		return Parent;
+		return parent;
 	}
 
 	public String getLocalName() {
-		return NodeName;
+		return nodeName;
 	}
 
 	public Node getNextSibling() {
-		return NextSibling;
+		return nextSibling;
 	}
 	public Node getFirstChild() {
 
-		return FirstChild;
+		return firstChild;
 	}
 
 	public Node getLastChild() {
 
-		return LastChild;
+		return lastChild;
 	}
 	public String getTextContent()
 	{
-		return TextContent;
+		return textContent;
 		
 	}
+	public void setChildren(Node[] childNodes)
+	{
+		hasChildren=true;
+		firstChild=childNodes[0];
+		lastChild=childNodes[childNodes.length -1];
+		children=childNodes;
+	}
+		
 }

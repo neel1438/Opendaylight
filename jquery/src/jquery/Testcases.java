@@ -37,13 +37,13 @@ public class Testcases {
         doc.normalizeDocument();
         rootTestNode = ((NodeList) xpath.evaluate("//a", doc, XPathConstants.NODESET)).item(0);
 
-        //our "a" node that we hardcoded doesn't have a parent document, so simulate that here by
+        //our "a" node that we hard coded doesn't have a parent document, so simulate that here by
         //removing "a" from the "document".
       rootTestNode.getParentNode().removeChild( rootTestNode );
     }
 
     public void setupHardcodedNode() {
-        //
+      
 //        rootTestNode = HardCodedNodeBuilder.root;
         rootTestNode = new HardCodedNodeBuilder().a;
     }
@@ -138,8 +138,9 @@ public class Testcases {
     public void simpleXPathTests() throws XPathExpressionException {
 
         // select node c1 whose text values is "Some Value"
+    	evaluate("//c1", "Some Value");
         evaluate("count(//c1)", "1");
-        evaluate("//c1", "Some Value");
+        
 
         // get the nodes whose text values is "Some Value" (Comparing names)
         evaluate("name(//*[text()[.='Some Value']])", "c1");
@@ -191,7 +192,8 @@ public class Testcases {
         //this doesn't work when there is no "root" because //* matches all children of the root document.
         //when we remove the root document, our root "a" because the true "root". This should work if there
         //is a true "Root" document provided.
-        evaluateExpectList( "//*[.//*/*[name() = 'c1']]", "a" );
+       
+        //evaluateExpectList( "//*[.//*/*[name() = 'c1']]", "a" );
 
 
     }

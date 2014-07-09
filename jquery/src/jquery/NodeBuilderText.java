@@ -4,17 +4,17 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 public class NodeBuilderText extends ThrowExceptionText{
-	Node Parent;
-	Node NextSibling;
-	String NodeValue;
+	Node parent;
+	Node nextSibling;
+	String nodeValue;
 	
 
 	
-	public NodeBuilderText(String Nodevalue,Node parent,Node nextsibling)
+	public NodeBuilderText(String Nodevalue,Node parentNode,Node nextsibling)
 	{
-		NodeValue=Nodevalue;
-		Parent=parent;
-		NextSibling=nextsibling;
+		nodeValue=Nodevalue;
+		parent=parentNode;
+		nextSibling=nextsibling;
 	}
 
 	public short getNodeType() {
@@ -27,7 +27,7 @@ public class NodeBuilderText extends ThrowExceptionText{
 	}
 	public String getNodeValue()
 	{
-		return NodeValue;
+		return nodeValue;
 	}
 
 	public String getNamespaceURI() {
@@ -49,7 +49,7 @@ public class NodeBuilderText extends ThrowExceptionText{
 	}
 
 	public Node getParentNode() {
-		return Parent;
+		return parent;
 	}
 
 	public String getLocalName() {
@@ -57,7 +57,7 @@ public class NodeBuilderText extends ThrowExceptionText{
 	}
 
 	public Node getNextSibling() {
-		return NextSibling;
+		return nextSibling;
 	}
 	public Node getFirstChild() {
 
@@ -70,7 +70,7 @@ public class NodeBuilderText extends ThrowExceptionText{
 	}
 	public String getTextContent()
 	{
-		return NodeValue;
+		return nodeValue;
 		
 	}
 }

@@ -20,7 +20,7 @@ public class TestXml {
 	@Before
 	public void setup() throws Exception
 	{
-		HardCodedRoot=new HardCodedNodeBuilder().root;
+		HardCodedRoot=new HardCodedNodeBuilder().a;
 		DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 	    Document doc = dBuilder.parse("src/jquery/resources/test.xml");
 	    doc.normalizeDocument();
