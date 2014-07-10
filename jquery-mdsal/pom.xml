@@ -5,6 +5,11 @@
   <groupId>jquery-archetype</groupId>
   <artifactId>jquery-mdsal</artifactId>
   <version>1.0</version>
+  <parent>
+    <groupId>org.opendaylight.controller.samples</groupId>
+    <artifactId>sal-samples</artifactId>
+    <version>1.1-SNAPSHOT</version>
+  </parent>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -105,7 +110,7 @@
       <id>website</id>
       <url>${sitedeploy}</url>
     </site>
-  </distributionManagement>
+    </distributionManagement>
 
   <build>
 

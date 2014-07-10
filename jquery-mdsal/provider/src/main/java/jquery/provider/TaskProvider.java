@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.sal.binding.api.data.DataModificationTransaction;
+
 import org.opendaylight.controller.sal.common.util.Rpcs;
 import org.opendaylight.yang.gen.v1.opendaylight.sample.rev140407.EntryId;
 import org.opendaylight.yang.gen.v1.opendaylight.sample.rev140407.SaveEntryInput;

@@ -81,13 +81,13 @@
             <artifactId>jquery-mdsal-model</artifactId>
             <version>1.0</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.opendaylight.controller</groupId>
             <artifactId>sal-core-api</artifactId>
             <version>${mdsal.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.opendaylight.controller</groupId>
             <artifactId>config-api</artifactId>
@@ -103,15 +103,17 @@
             <artifactId>sal-binding-api</artifactId>
             <version>${mdsal.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.opendaylight.controller</groupId>
             <artifactId>sal-common-util</artifactId>
             <version>${mdsal.version}</version>
         </dependency>
+
         <dependency>
-      <groupId>equinoxSDK381</groupId>
-      <artifactId>org.eclipse.osgi</artifactId>
-      <version>${equinox.osgi.version}</version>
-    </dependency>
+            <groupId>equinoxSDK381</groupId>
+            <artifactId>org.eclipse.osgi</artifactId>
+             <version>${equinox.osgi.version}</version>
+        </dependency>
     </dependencies>
 </project>

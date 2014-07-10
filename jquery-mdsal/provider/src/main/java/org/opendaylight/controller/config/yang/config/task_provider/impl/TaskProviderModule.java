@@ -1,7 +1,9 @@
 package org.opendaylight.controller.config.yang.config.task_provider.impl;
 
 import jquery.provider.TaskProvider;
+
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+import org.opendaylight.controller.md.sal.dom.api.DOMDataBroker;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
 import org.opendaylight.controller.sal.binding.api.NotificationProviderService;
 import org.opendaylight.controller.sal.binding.api.RpcProviderRegistry;
@@ -31,6 +33,8 @@ public class TaskProviderModule extends org.opendaylight.controller.config.yang.
 
         DataBroker dataBrokerService = getDataBrokerDependency();
         appProvider.setDataService(dataBrokerService);
+
+        DOMDataBroker domDataBroker=getDomDataBrokerDependency();
 
         RpcProviderRegistry rpcRegistryDependency = getRpcRegistryDependency();
         final BindingAwareBroker.RpcRegistration<TaskService> rpcRegistration =
