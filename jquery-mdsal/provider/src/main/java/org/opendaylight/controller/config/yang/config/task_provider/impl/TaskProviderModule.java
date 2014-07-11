@@ -35,6 +35,8 @@ public class TaskProviderModule extends org.opendaylight.controller.config.yang.
         appProvider.setDataService(dataBrokerService);
 
         DOMDataBroker domDataBroker=getDomDataBrokerDependency();
+        System.out.println(domDataBroker);
+
 
         RpcProviderRegistry rpcRegistryDependency = getRpcRegistryDependency();
         final BindingAwareBroker.RpcRegistration<TaskService> rpcRegistration =

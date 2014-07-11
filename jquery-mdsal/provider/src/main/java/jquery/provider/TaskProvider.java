@@ -43,9 +43,11 @@ public class TaskProvider implements TaskService, AutoCloseable {
       return dataService;
     }
 
-    public void setDataService(DataBroker dataService) {
-      this.dataService = dataService;
-    }
+
+      public void setDataService(DataBroker dataService) {
+        this.dataService = dataService;
+      }
+
 
     public TaskProvider() {
       executor = Executors.newFixedThreadPool(1);
