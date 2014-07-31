@@ -19,32 +19,18 @@ import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.options;
 import static org.ops4j.pax.exam.CoreOptions.systemPackages;
 import static org.ops4j.pax.exam.CoreOptions.systemProperty;
-import javassist.ClassPool;
 
 import javax.inject.Inject;
-//import javax.management.MBeanServer;
-//import javax.management.ObjectName;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.controller.md.sal.dom.api.DOMDataBroker;
-//import org.opendaylight.controller.sample.kitchen.api.EggsType;
-//import org.opendaylight.controller.sample.kitchen.api.KitchenService;
-//import org.opendaylight.yang.gen.v1.http.netconfcentral.org.ns.toaster.rev091120.HashBrown;
 import org.opendaylight.yang.gen.v1.http.netconfcentral.org.ns.toaster.rev091120.Toaster;
-import org.opendaylight.yangtools.sal.binding.generator.impl.ModuleInfoBackedContext;
-import org.opendaylight.yangtools.sal.binding.generator.impl.RuntimeGeneratedMappingServiceImpl;
-//import org.opendaylight.yang.gen.v1.http.netconfcentral.org.ns.toaster.rev091120.WhiteBread;
-//import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.controller.md.sal.dom.rev131028.DomDataBroker;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.opendaylight.yangtools.yang.binding.YangModuleInfo;
-import org.opendaylight.yangtools.yang.binding.util.BindingReflections;
 import org.opendaylight.yangtools.yang.data.api.CompositeNode;
 import org.opendaylight.yangtools.yang.data.impl.codec.BindingIndependentMappingService;
-import org.opendaylight.yangtools.yang.model.api.SchemaContext;
 import org.ops4j.pax.exam.Configuration;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.junit.PaxExam;
@@ -62,10 +48,10 @@ public class ToasterTest {
     @Filter(timeout=60*1000)
 //    KitchenService kitchenService;
     DataBroker dataBroker;
-    DOMDataBroker domDataBroker;
-    BindingIndependentMappingService mappingService;
-    SchemaContext context;
 
+    @Inject
+    @Filter(timeout=60*1000)
+    BindingIndependentMappingService mappingService;
 
     @Configuration
     public Option[] config() {
@@ -104,23 +90,6 @@ public class ToasterTest {
                 mavenBundle("org.openexi", "nagasena-rta").versionAsInProject()
         );
     }
-    public static final SchemaContext getSchemaContext() {
-        Iterable<YangModuleInfo> moduleInfos;
-        moduleInfos = BindingReflections.loadModuleInfos();
-        ModuleInfoBackedContext moduleContext = ModuleInfoBackedContext.create();
-        moduleContext.addModuleInfos(moduleInfos);
-        return moduleContext.tryToCreateSchemaContext().get();
-        }
-
-        public void setup() {
-            System.out.println("Building context");
-            context = getSchemaContext();
-            System.out.println("Context built");
-            System.out.println("Building mapping service");
-            mappingService = new RuntimeGeneratedMappingServiceImpl(ClassPool.getDefault());
-            ((RuntimeGeneratedMappingServiceImpl)mappingService).onGlobalContextUpdated(context);
-            System.out.println("Mapping service built");
-       }
 
     @Test
     public void testToaster() throws Exception {
@@ -137,7 +106,6 @@ public class ToasterTest {
         Toaster t = read.get().get();
         System.out.println("Got the toaster t:"+t);
 
-        setup();
         CompositeNode node = mappingService.toDataDom(t);
         System.out.println("compostite node is :"+node);
       //System.out.println(domDataBroker);
