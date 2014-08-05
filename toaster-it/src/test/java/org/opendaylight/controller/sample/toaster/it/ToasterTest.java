@@ -28,15 +28,19 @@ import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.yang.gen.v1.http.netconfcentral.org.ns.toaster.rev091120.Toaster;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.controller.md.sal.dom.rev131028.DomDataBroker;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.data.api.CompositeNode;
 import org.opendaylight.yangtools.yang.data.impl.codec.BindingIndependentMappingService;
+import org.opendaylight.yangtools.yang.data.impl.codec.xml.XmlDocumentUtils;
+import org.opendaylight.yangtools.yang.data.impl.codec.xml.XmlUtils;
 import org.ops4j.pax.exam.Configuration;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.options.DefaultCompositeOption;
 import org.ops4j.pax.exam.util.Filter;
 import org.ops4j.pax.exam.util.PathUtils;
+import org.w3c.dom.Document;
 
 import com.google.common.base.Optional;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -52,6 +56,8 @@ public class ToasterTest {
     @Inject
     @Filter(timeout=60*1000)
     BindingIndependentMappingService mappingService;
+
+    DomDataBroker domDataBroker;
 
     @Configuration
     public Option[] config() {
@@ -91,6 +97,12 @@ public class ToasterTest {
         );
     }
 
+
+
+    private Document documentFromCompositeNode(CompositeNode compNode) {
+        return XmlDocumentUtils.toDocument(compNode, XmlUtils.DEFAULT_XML_CODEC_PROVIDER);
+    }
+
     @Test
     public void testToaster() throws Exception {
         System.out.println("Test Starts");
@@ -108,9 +120,17 @@ public class ToasterTest {
 
         CompositeNode node = mappingService.toDataDom(t);
         System.out.println("compostite node is :"+node);
-      //System.out.println(domDataBroker);
-     // DOMDataWriteTransaction writeTx = domDataBroker.newWriteOnlyTransaction();
-      //writeTx.put(LogicalDatastoreType.OPERATIONAL, ,a);
+
+        Document doc=documentFromCompositeNode(node);
+        System.out.println("the document is : " + doc.getTextContent());
+
+        //InstanceIdentifier<Toaster> iidT = InstanceIdentifier.builder(Toaster.class).build();
+        //DOMDataWriteTransaction writeTx;
+       // writeTx.put(LogicalDatastoreType.OPERATIONAL, iidT, node);
+
+        //  System.out.println(domDataBroker);
+
+
 
       /*  InstanceIdentifier<Toaster> idToaster =InstanceIdentifier.builder(Toaster.class).build();
         DOMDataReadOnlyTransaction readTx1=domDataBroker.newReadOnlyTransaction();
