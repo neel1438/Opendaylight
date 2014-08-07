@@ -7,6 +7,8 @@
  */
 package org.opendaylight.controller.sample.toaster.it;
 
+
+
 //import org.junit.Assert;
 //import static org.junit.Assert.assertEquals;
 import static org.opendaylight.controller.test.sal.binding.it.TestHelper.baseModelBundles;
@@ -20,6 +22,9 @@ import static org.ops4j.pax.exam.CoreOptions.options;
 import static org.ops4j.pax.exam.CoreOptions.systemPackages;
 import static org.ops4j.pax.exam.CoreOptions.systemProperty;
 
+import java.net.URI;
+import java.sql.Date;
+
 import javax.inject.Inject;
 
 import org.junit.Test;
@@ -27,37 +32,42 @@ import org.junit.runner.RunWith;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.controller.md.sal.common.api.data.ReadFailedException;
+import org.opendaylight.controller.md.sal.dom.api.DOMDataReadOnlyTransaction;
 import org.opendaylight.yang.gen.v1.http.netconfcentral.org.ns.toaster.rev091120.Toaster;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.controller.md.sal.dom.rev131028.DomDataBroker;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.data.api.CompositeNode;
+import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
+import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.opendaylight.yangtools.yang.data.impl.codec.BindingIndependentMappingService;
-import org.opendaylight.yangtools.yang.data.impl.codec.xml.XmlDocumentUtils;
-import org.opendaylight.yangtools.yang.data.impl.codec.xml.XmlUtils;
 import org.ops4j.pax.exam.Configuration;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.options.DefaultCompositeOption;
 import org.ops4j.pax.exam.util.Filter;
 import org.ops4j.pax.exam.util.PathUtils;
-import org.w3c.dom.Document;
 
 import com.google.common.base.Optional;
+import com.google.common.util.concurrent.CheckedFuture;
 import com.google.common.util.concurrent.ListenableFuture;
-//import java.lang.management.ManagementFactory;
+@SuppressWarnings("deprecation")
 @RunWith(PaxExam.class)
 public class ToasterTest {
 
+
     @Inject
     @Filter(timeout=60*1000)
-//    KitchenService kitchenService;
     DataBroker dataBroker;
 
     @Inject
     @Filter(timeout=60*1000)
     BindingIndependentMappingService mappingService;
 
-    DomDataBroker domDataBroker;
+	 DomDataBroker domBroker;
+
+
 
     @Configuration
     public Option[] config() {
@@ -97,60 +107,47 @@ public class ToasterTest {
         );
     }
 
-
-
-    private Document documentFromCompositeNode(CompositeNode compNode) {
-        return XmlDocumentUtils.toDocument(compNode, XmlUtils.DEFAULT_XML_CODEC_PROVIDER);
-    }
-
     @Test
     public void testToaster() throws Exception {
-        System.out.println("Test Starts");
-      //  MBeanServer platformMBeanServer = ManagementFactory.getPlatformMBeanServer();
-        //ObjectName providerOn = new ObjectName("org.opendaylight.controller:instanceName=toaster-provider-impl,type=RuntimeBean,moduleFactoryName=toaster-provider-impl");
-
-        //long toastsMade = (long) platformMBeanServer.getAttribute(providerOn, "ToastsMade");
-       // assertEquals(0, toastsMade);
-        InstanceIdentifier<Toaster> iidToaster = InstanceIdentifier.builder(Toaster.class).build();
-        ReadOnlyTransaction readTx = dataBroker.newReadOnlyTransaction();
-        ListenableFuture<Optional<Toaster>> read = readTx.read(LogicalDatastoreType.OPERATIONAL, iidToaster);
-        readTx.close();
-        Toaster t = read.get().get();
-        System.out.println("Got the toaster t:"+t);
-
-        CompositeNode node = mappingService.toDataDom(t);
-        System.out.println("compostite node is :"+node);
-
-        Document doc=documentFromCompositeNode(node);
-        System.out.println("the document is : " + doc.getTextContent());
-
-        //InstanceIdentifier<Toaster> iidT = InstanceIdentifier.builder(Toaster.class).build();
-        //DOMDataWriteTransaction writeTx;
-       // writeTx.put(LogicalDatastoreType.OPERATIONAL, iidT, node);
-
-        //  System.out.println(domDataBroker);
 
 
+          InstanceIdentifier<Toaster> iidToaster = InstanceIdentifier.builder(Toaster.class).build();
+          ReadOnlyTransaction readTx = dataBroker.newReadOnlyTransaction();
+          ListenableFuture<Optional<Toaster>> read = readTx.read(LogicalDatastoreType.OPERATIONAL, iidToaster);
+          readTx.close();
+          Toaster t = read.get().get();
+          System.out.println("Got the toaster t:"+t);
 
-      /*  InstanceIdentifier<Toaster> idToaster =InstanceIdentifier.builder(Toaster.class).build();
-        DOMDataReadOnlyTransaction readTx1=domDataBroker.newReadOnlyTransaction();
-        ListenableFuture<Optional<Toaster>> read1 = readTx1.read(LogicalDatastoreType.OPERATIONAL, idToaster);
-        readTx1.close();
-        Toaster t1 = read1.get().get();
-        System.out.println("Got the toaster t1:"+t1);
+          CompositeNode node = mappingService.toDataDom(t);
+          System.out.println("compostite node is :"+node);
 
-      //  boolean success = true;
+
+          DOMDataReadOnlyTransaction readTx2 = domBroker.newReadOnlyTransaction();
+
+          YangInstanceIdentifier build = YangInstanceIdentifier.builder( QName.create( new URI( "http://netconfcentral.org/ns/toaster"), Date.valueOf( "2009-11-20" ), "toaster" ) ).build();
+          CheckedFuture<Optional<NormalizedNode<?, ?>>, ReadFailedException> read2 = readTx2.read( LogicalDatastoreType.OPERATIONAL, build );
+          NormalizedNode<?, ?> normalizedNode = read2.get().get();
+
+
+      /*  MBeanServer platformMBeanServer = ManagementFactory.getPlatformMBeanServer();
+        ObjectName providerOn = new ObjectName("org.opendaylight.controller:instanceName=toaster-provider-impl,type=RuntimeBean,moduleFactoryName=toaster-provider-impl");
+
+        long toastsMade = (long) platformMBeanServer.getAttribute(providerOn, "ToastsMade");
+        assertEquals(0, toastsMade);
+
+        boolean success = true;
 
         // Make toasts using OSGi service
-      //  success &= kitchenService.makeBreakfast( EggsType.SCRAMBLED, HashBrown.class, 4).get().isSuccessful();
-       // success &= kitchenService.makeBreakfast( EggsType.POACHED, WhiteBread.class, 8 ).get().isSuccessful();
+        success &= kitchenService.makeBreakfast( EggsType.SCRAMBLED, HashBrown.class, 4).get().isSuccessful();
+        success &= kitchenService.makeBreakfast( EggsType.POACHED, WhiteBread.class, 8 ).get().isSuccessful();
 
-      //  Assert.assertTrue("Not all breakfasts succeeded", success);
+        Assert.assertTrue("Not all breakfasts succeeded", success);
 
         // Verify toasts made count on provider via JMX/config-subsystem
-       // toastsMade = (long) platformMBeanServer.getAttribute(providerOn, "ToastsMade");
-      //  assertEquals(2, toastsMade);
-       */
+        toastsMade = (long) platformMBeanServer.getAttribute(providerOn, "ToastsMade");
+        assertEquals(2, toastsMade);*/
+
+
     }
 
 }
