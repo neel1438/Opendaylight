@@ -24,22 +24,22 @@ import static org.ops4j.pax.exam.CoreOptions.systemProperty;
 
 import java.net.URI;
 import java.sql.Date;
+import java.util.Iterator;
 
 import javax.inject.Inject;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.controller.md.sal.common.api.data.ReadFailedException;
+import org.opendaylight.controller.md.sal.dom.api.DOMDataBroker;
 import org.opendaylight.controller.md.sal.dom.api.DOMDataReadOnlyTransaction;
-import org.opendaylight.yang.gen.v1.http.netconfcentral.org.ns.toaster.rev091120.Toaster;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.controller.md.sal.dom.rev131028.DomDataBroker;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.QName;
-import org.opendaylight.yangtools.yang.data.api.CompositeNode;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
+import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier.PathArgument;
+import org.opendaylight.yangtools.yang.data.api.schema.DataContainerChild;
+import org.opendaylight.yangtools.yang.data.api.schema.DataContainerNode;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.opendaylight.yangtools.yang.data.impl.codec.BindingIndependentMappingService;
 import org.ops4j.pax.exam.Configuration;
@@ -51,7 +51,7 @@ import org.ops4j.pax.exam.util.PathUtils;
 
 import com.google.common.base.Optional;
 import com.google.common.util.concurrent.CheckedFuture;
-import com.google.common.util.concurrent.ListenableFuture;
+//import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.controller.md.sal.dom.rev131028.DomDataBroker;
 @SuppressWarnings("deprecation")
 @RunWith(PaxExam.class)
 public class ToasterTest {
@@ -65,7 +65,9 @@ public class ToasterTest {
     @Filter(timeout=60*1000)
     BindingIndependentMappingService mappingService;
 
-	 DomDataBroker domBroker;
+    @Inject
+    @Filter(timeout=60*1000)
+    DOMDataBroker domBroker;
 
 
 
@@ -107,10 +109,10 @@ public class ToasterTest {
         );
     }
 
+
     @Test
     public void testToaster() throws Exception {
-
-
+/*
           InstanceIdentifier<Toaster> iidToaster = InstanceIdentifier.builder(Toaster.class).build();
           ReadOnlyTransaction readTx = dataBroker.newReadOnlyTransaction();
           ListenableFuture<Optional<Toaster>> read = readTx.read(LogicalDatastoreType.OPERATIONAL, iidToaster);
@@ -121,12 +123,23 @@ public class ToasterTest {
           CompositeNode node = mappingService.toDataDom(t);
           System.out.println("compostite node is :"+node);
 
-
+*/
           DOMDataReadOnlyTransaction readTx2 = domBroker.newReadOnlyTransaction();
 
           YangInstanceIdentifier build = YangInstanceIdentifier.builder( QName.create( new URI( "http://netconfcentral.org/ns/toaster"), Date.valueOf( "2009-11-20" ), "toaster" ) ).build();
           CheckedFuture<Optional<NormalizedNode<?, ?>>, ReadFailedException> read2 = readTx2.read( LogicalDatastoreType.OPERATIONAL, build );
           NormalizedNode<?, ?> normalizedNode = read2.get().get();
+
+          System.out.println("Normalized Node is : " + normalizedNode);
+          System.out.println("Normalized Node's identifier  is : " + normalizedNode.getIdentifier());
+          System.out.println("Normalized Node's node type is : " + normalizedNode.getNodeType());
+          System.out.println("Normalized Node's node value is : " + normalizedNode.getValue());
+
+          DataContainerNode<?> node=(DataContainerNode<?>) normalizedNode;
+          Iterator<DataContainerChild<? extends PathArgument, ?>> iterator = node.getValue().iterator();
+          while (iterator.hasNext()){
+              System.out.println("Child node is :" + iterator.next());
+            }
 
 
       /*  MBeanServer platformMBeanServer = ManagementFactory.getPlatformMBeanServer();
