@@ -51,7 +51,6 @@ import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.options.DefaultCompositeOption;
 import org.ops4j.pax.exam.util.Filter;
 import org.ops4j.pax.exam.util.PathUtils;
-import org.w3c.dom.Node;
 
 import com.google.common.base.Optional;
 import com.google.common.util.concurrent.CheckedFuture;
@@ -141,14 +140,17 @@ public class ToasterTest {
 
           DataContainerNode<?> node=(DataContainerNode<?>) normalizedNode;
           Iterator<DataContainerChild<? extends PathArgument, ?>> iterator = node.getValue().iterator();
+
           while (iterator.hasNext()){
-              System.out.println("Child node is :" + iterator.next());
+
+        	  System.out.println("Child node is :" + iterator.next());
             }
           XPath xpath=XPathFactory.newInstance().newXPath();
 
-          Node node1=(Node)node;
+          NodeBuilderElement element=new NodeBuilderElement("name","text", null, null);
+          //element.setChildren();
 
-          String answer=(String)xpath.evaluate("/", node1, XPathConstants.STRING);
+          String answer=(String)xpath.evaluate("/", element, XPathConstants.STRING);
           System.out.println(answer);
       /*  MBeanServer platformMBeanServer = ManagementFactory.getPlatformMBeanServer();
         ObjectName providerOn = new ObjectName("org.opendaylight.controller:instanceName=toaster-provider-impl,type=RuntimeBean,moduleFactoryName=toaster-provider-impl");
