@@ -27,6 +27,9 @@ import java.sql.Date;
 import java.util.Iterator;
 
 import javax.inject.Inject;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,6 +51,7 @@ import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.options.DefaultCompositeOption;
 import org.ops4j.pax.exam.util.Filter;
 import org.ops4j.pax.exam.util.PathUtils;
+import org.w3c.dom.Node;
 
 import com.google.common.base.Optional;
 import com.google.common.util.concurrent.CheckedFuture;
@@ -140,8 +144,12 @@ public class ToasterTest {
           while (iterator.hasNext()){
               System.out.println("Child node is :" + iterator.next());
             }
+          XPath xpath=XPathFactory.newInstance().newXPath();
 
+          Node node1=(Node)node;
 
+          String answer=(String)xpath.evaluate("/", node1, XPathConstants.STRING);
+          System.out.println(answer);
       /*  MBeanServer platformMBeanServer = ManagementFactory.getPlatformMBeanServer();
         ObjectName providerOn = new ObjectName("org.opendaylight.controller:instanceName=toaster-provider-impl,type=RuntimeBean,moduleFactoryName=toaster-provider-impl");
 
