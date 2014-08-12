@@ -147,7 +147,7 @@ public class ToasterTest {
 
        XPath xpath=XPathFactory.newInstance().newXPath();
 
-        NodeBuilderElement element=new NodeBuilderElement(node);
+        NodeBuilderElement element=new NodeBuilderElement(node,null);
         //element.setChildren();
        String answer=(String)xpath.evaluate("/", element, XPathConstants.STRING);
        System.out.println(answer);

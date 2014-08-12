@@ -2,11 +2,7 @@ package org.opendaylight.controller.sample.toaster.it;
 
 
 
-import java.util.Iterator;
 
-import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier.PathArgument;
-import org.opendaylight.yangtools.yang.data.api.schema.ContainerNode;
-import org.opendaylight.yangtools.yang.data.api.schema.DataContainerChild;
 import org.opendaylight.yangtools.yang.data.api.schema.DataContainerNode;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -14,31 +10,21 @@ import org.w3c.dom.Node;
 public class NodeBuilderElement extends NewElement{
 
 	boolean hasChildren;
-	String nodeName;
-	Node parent;
-	Node nextSibling;
-	Node firstChild;
-	Node lastChild;
-	String textContent;
-	Node[] children;
+	DataContainerNode<?> node;
+	NodeBuilderElement parent;
 
-
-	public NodeBuilderElement(DataContainerNode<?> node)
+	public NodeBuilderElement(DataContainerNode<?> node1,NodeBuilderElement parent1)
 	{
-		nodeName=node.getIdentifier().toString();
-		if(node.getValue() instanceof Iterable)
+		node=node1;
+		parent=parent1;
+		if(node1.getValue() instanceof Iterable)
 		{
-			textContent=null;
 			hasChildren=true;
-            Iterator<DataContainerChild<? extends PathArgument, ?>> iterator = node.getValue().iterator();
-			firstChild=new NodeBuilderElement((ContainerNode) iterator.next());
+
 		}
 		else
 		{
-			textContent=node.getValue().toString();
 			hasChildren=false;
-			firstChild=null;
-			lastChild=null;
 		}
 
 	}
@@ -77,7 +63,7 @@ public class NodeBuilderElement extends NewElement{
 	@Override
 	public String getNodeName() {
 
-		return nodeName;
+		return node.getIdentifier().toString();
 	}
 
 	@Override
@@ -87,36 +73,34 @@ public class NodeBuilderElement extends NewElement{
 
 	@Override
 	public String getLocalName() {
-		return nodeName;
+		return this.getNodeName();
 	}
 
 	@Override
 	public Node getNextSibling() {
-		return nextSibling;
+		return null;
 	}
 	@Override
 	public Node getFirstChild() {
 
-		return firstChild;
+		return null;
 	}
 
 	@Override
 	public Node getLastChild() {
 
-		return lastChild;
+		return null;
 	}
 	@Override
 	public String getTextContent()
 	{
-		return textContent;
+		if(this.hasChildren)
+		{
+			return null;
+		}
+		return node.getValue().toString();
 
 	}
-	public void setChildren(Node... childNodes)
-	{
-		hasChildren=true;
-		firstChild=childNodes[0];
-		lastChild=childNodes[childNodes.length -1];
-		children=childNodes;
-	}
+
 
 }
