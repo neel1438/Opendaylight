@@ -3,17 +3,17 @@ package org.opendaylight.controller.sample.toaster.it;
 
 
 
-import org.opendaylight.yangtools.yang.data.api.schema.DataContainerNode;
+import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 public class NodeBuilderElement extends NewElement{
 
 	boolean hasChildren;
-	DataContainerNode<?> node;
+	NormalizedNode<?,?> node;
 	NodeBuilderElement parent;
 
-	public NodeBuilderElement(DataContainerNode<?> node1,NodeBuilderElement parent1)
+	public NodeBuilderElement(NormalizedNode<?,?> node1,NodeBuilderElement parent1)
 	{
 		node=node1;
 		parent=parent1;

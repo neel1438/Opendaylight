@@ -11,6 +11,8 @@ package org.opendaylight.controller.sample.toaster.it;
 
 //import org.junit.Assert;
 //import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.opendaylight.controller.test.sal.binding.it.TestHelper.baseModelBundles;
 import static org.opendaylight.controller.test.sal.binding.it.TestHelper.bindingAwareSalBundles;
 import static org.opendaylight.controller.test.sal.binding.it.TestHelper.configMinumumBundles;
@@ -23,14 +25,19 @@ import static org.ops4j.pax.exam.CoreOptions.systemPackages;
 import static org.ops4j.pax.exam.CoreOptions.systemProperty;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.Date;
-import java.util.Iterator;
+import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
@@ -40,9 +47,6 @@ import org.opendaylight.controller.md.sal.dom.api.DOMDataBroker;
 import org.opendaylight.controller.md.sal.dom.api.DOMDataReadOnlyTransaction;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
-import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier.PathArgument;
-import org.opendaylight.yangtools.yang.data.api.schema.DataContainerChild;
-import org.opendaylight.yangtools.yang.data.api.schema.DataContainerNode;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.opendaylight.yangtools.yang.data.impl.codec.BindingIndependentMappingService;
 import org.ops4j.pax.exam.Configuration;
@@ -51,6 +55,10 @@ import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.options.DefaultCompositeOption;
 import org.ops4j.pax.exam.util.Filter;
 import org.ops4j.pax.exam.util.PathUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.google.common.base.Optional;
 import com.google.common.util.concurrent.CheckedFuture;
@@ -59,6 +67,7 @@ import com.google.common.util.concurrent.CheckedFuture;
 @RunWith(PaxExam.class)
 public class ToasterTest {
 
+	XPath xpath;
 
     @Inject
     @Filter(timeout=60*1000)
@@ -72,8 +81,40 @@ public class ToasterTest {
     @Filter(timeout=60*1000)
     DOMDataBroker domBroker;
 
+	Element rootTestNode;
 
+    @Before
+    public void setup() throws Exception {
+        xpath = XPathFactory.newInstance().newXPath();
+        setupRealXml();
+       // setupHardcodedNode();
+       // rootTestNode = new MyNode( rootTestNode );
+        System.out.println("Initialized!");
+    }
 
+    public void setupRealXml() throws Exception {
+        DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        Document doc = dBuilder.parse("src/test/resources/toaster.xml");
+        doc.normalizeDocument();
+        rootTestNode = (Element) xpath.evaluate("//toaster", doc, XPathConstants.NODE);
+
+        //our "a" node that we hard coded doesn't have a parent document, so simulate that here by
+        //removing "a" from the "document".
+      //rootTestNode.getParentNode().removeChild( rootTestNode );
+    }
+
+    public void setupNormalizedNode() throws URISyntaxException, InterruptedException, ExecutionException {
+
+    	//rootTestNode = HardCodedNodeBuilder.root;
+        //rootTestNode = new HardCodedNodeBuilder().a;
+
+    	DOMDataReadOnlyTransaction readTx2 = domBroker.newReadOnlyTransaction();
+        YangInstanceIdentifier build = YangInstanceIdentifier.builder( QName.create( new URI( "http://netconfcentral.org/ns/toaster"), Date.valueOf( "2009-11-20" ), "toaster" ) ).build();
+        CheckedFuture<Optional<NormalizedNode<?, ?>>, ReadFailedException> read2 = readTx2.read( LogicalDatastoreType.OPERATIONAL, build );
+        NormalizedNode<?, ?> normalizedNode = read2.get().get();
+        System.out.println("Normalized Node is : " + normalizedNode);
+
+    }
     @Configuration
     public Option[] config() {
         return options(systemProperty("osgi.console").value("2401"), mavenBundle("org.slf4j", "slf4j-api")
@@ -112,46 +153,55 @@ public class ToasterTest {
         );
     }
 
+    public void evaluate(String xpathexp, String expectedValue) throws XPathExpressionException {
+        String node = (String) xpath.evaluate(xpathexp, rootTestNode, XPathConstants.STRING);
+        System.out.println( "'" + node + "'" );
+        assertEquals(expectedValue, node);
+    }
+
+    @Test
+    public void selfTest() throws XPathExpressionException {
+        System.out.println("Testing1 ..!!");
+        NodeList nodelist = (NodeList) xpath.evaluate(".", rootTestNode, XPathConstants.NODESET);
+        assertNotNull(nodelist);
+        assertEquals(1, nodelist.getLength());
+        Node root = nodelist.item(0);
+        assertNotNull(root);
+        assertEquals("toaster", root.getNodeName());
+
+    }
+
 
     @Test
     public void testToaster() throws Exception {
-/*
-          InstanceIdentifier<Toaster> iidToaster = InstanceIdentifier.builder(Toaster.class).build();
-          ReadOnlyTransaction readTx = dataBroker.newReadOnlyTransaction();
-          ListenableFuture<Optional<Toaster>> read = readTx.read(LogicalDatastoreType.OPERATIONAL, iidToaster);
-          readTx.close();
-          Toaster t = read.get().get();
-          System.out.println("Got the toaster t:"+t);
 
-          CompositeNode node = mappingService.toDataDom(t);
-          System.out.println("compostite node is :"+node);
+    	evaluate("//toasterManufacturer","Opendaylight");
+    	evaluate("//toasterStatus","up");
 
+    	/*
+    	DOMDataReadOnlyTransaction readTx2 = domBroker.newReadOnlyTransaction();
+        YangInstanceIdentifier build = YangInstanceIdentifier.builder( QName.create( new URI( "http://netconfcentral.org/ns/toaster"), Date.valueOf( "2009-11-20" ), "toaster" ) ).build();
+        CheckedFuture<Optional<NormalizedNode<?, ?>>, ReadFailedException> read2 = readTx2.read( LogicalDatastoreType.OPERATIONAL, build );
+        NormalizedNode<?, ?> normalizedNode = read2.get().get();
+        System.out.println("Normalized Node is : " + normalizedNode);
+        System.out.println("Normalized Node's identifier  is : " + normalizedNode.getIdentifier());
+        System.out.println("Normalized Node's node type is : " + normalizedNode.getNodeType());
+        System.out.println("Normalized Node's node value is : " + normalizedNode.getValue());
+
+        DataContainerNode<?> node=(DataContainerNode<?>) normalizedNode;
+        Iterator<DataContainerChild<? extends PathArgument, ?>> iterator = node.getValue().iterator();
+        System.out.println(iterator.getClass().getName());
+        while (iterator.hasNext()){
+      	  System.out.println("Child node is :" + iterator.next());
+        }
 */
-          DOMDataReadOnlyTransaction readTx2 = domBroker.newReadOnlyTransaction();
 
-          YangInstanceIdentifier build = YangInstanceIdentifier.builder( QName.create( new URI( "http://netconfcentral.org/ns/toaster"), Date.valueOf( "2009-11-20" ), "toaster" ) ).build();
-          CheckedFuture<Optional<NormalizedNode<?, ?>>, ReadFailedException> read2 = readTx2.read( LogicalDatastoreType.OPERATIONAL, build );
-          NormalizedNode<?, ?> normalizedNode = read2.get().get();
-
-          System.out.println("Normalized Node is : " + normalizedNode);
-          System.out.println("Normalized Node's identifier  is : " + normalizedNode.getIdentifier());
-          System.out.println("Normalized Node's node type is : " + normalizedNode.getNodeType());
-          System.out.println("Normalized Node's node value is : " + normalizedNode.getValue());
-
-          DataContainerNode<?> node=(DataContainerNode<?>) normalizedNode;
-          Iterator<DataContainerChild<? extends PathArgument, ?>> iterator = node.getValue().iterator();
-          System.out.println(iterator.getClass().getName());
-          while (iterator.hasNext()){
-        	  System.out.println("Child node is :" + iterator.next());
-            }
-
-       XPath xpath=XPathFactory.newInstance().newXPath();
-
-        NodeBuilderElement element=new NodeBuilderElement(node,null);
+/*
+        NodeBuilderElement element=new NodeBuilderElement(normalizedNode,null);
         //element.setChildren();
-       String answer=(String)xpath.evaluate("/", element, XPathConstants.STRING);
-       System.out.println(answer);
-
+       String answer=(String)xpath.evaluate("/toaster", element, XPathConstants.STRING);
+       System.out.println("The answer is "+answer);
+*/
 
       /*  MBeanServer platformMBeanServer = ManagementFactory.getPlatformMBeanServer();
         ObjectName providerOn = new ObjectName("org.opendaylight.controller:instanceName=toaster-provider-impl,type=RuntimeBean,moduleFactoryName=toaster-provider-impl");
