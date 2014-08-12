@@ -140,18 +140,19 @@ public class ToasterTest {
 
           DataContainerNode<?> node=(DataContainerNode<?>) normalizedNode;
           Iterator<DataContainerChild<? extends PathArgument, ?>> iterator = node.getValue().iterator();
-
+          System.out.println(iterator.getClass().getName());
           while (iterator.hasNext()){
-
         	  System.out.println("Child node is :" + iterator.next());
             }
-          XPath xpath=XPathFactory.newInstance().newXPath();
 
-          NodeBuilderElement element=new NodeBuilderElement("name","text", null, null);
-          //element.setChildren();
+       XPath xpath=XPathFactory.newInstance().newXPath();
 
-          String answer=(String)xpath.evaluate("/", element, XPathConstants.STRING);
-          System.out.println(answer);
+        NodeBuilderElement element=new NodeBuilderElement(node);
+        //element.setChildren();
+       String answer=(String)xpath.evaluate("/", element, XPathConstants.STRING);
+       System.out.println(answer);
+
+
       /*  MBeanServer platformMBeanServer = ManagementFactory.getPlatformMBeanServer();
         ObjectName providerOn = new ObjectName("org.opendaylight.controller:instanceName=toaster-provider-impl,type=RuntimeBean,moduleFactoryName=toaster-provider-impl");
 

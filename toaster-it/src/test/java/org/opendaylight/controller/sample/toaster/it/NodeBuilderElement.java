@@ -2,6 +2,12 @@ package org.opendaylight.controller.sample.toaster.it;
 
 
 
+import java.util.Iterator;
+
+import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier.PathArgument;
+import org.opendaylight.yangtools.yang.data.api.schema.ContainerNode;
+import org.opendaylight.yangtools.yang.data.api.schema.DataContainerChild;
+import org.opendaylight.yangtools.yang.data.api.schema.DataContainerNode;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
@@ -17,13 +23,23 @@ public class NodeBuilderElement extends NewElement{
 	Node[] children;
 
 
-	public NodeBuilderElement(String Name,String Textcontent,Node parentNode,Node nextsibling)
+	public NodeBuilderElement(DataContainerNode<?> node)
 	{
-		nodeName=Name;
-		textContent=Textcontent;
-		parent=parentNode;
-		nextSibling=nextsibling;
-		hasChildren=false;
+		nodeName=node.getIdentifier().toString();
+		if(node.getValue() instanceof Iterable)
+		{
+			textContent=null;
+			hasChildren=true;
+            Iterator<DataContainerChild<? extends PathArgument, ?>> iterator = node.getValue().iterator();
+			firstChild=new NodeBuilderElement((ContainerNode) iterator.next());
+		}
+		else
+		{
+			textContent=node.getValue().toString();
+			hasChildren=false;
+			firstChild=null;
+			lastChild=null;
+		}
 
 	}
 
