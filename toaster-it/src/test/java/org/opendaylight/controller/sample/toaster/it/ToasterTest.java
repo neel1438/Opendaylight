@@ -100,7 +100,7 @@ public class ToasterTest {
 
         //our "a" node that we hard coded doesn't have a parent document, so simulate that here by
         //removing "a" from the "document".
-      //rootTestNode.getParentNode().removeChild( rootTestNode );
+      //rootTestNode.getParentNode().removeChild(rootTestNode );
     }
 
     public void setupNormalizedNode() throws URISyntaxException, InterruptedException, ExecutionException {
@@ -113,6 +113,7 @@ public class ToasterTest {
         CheckedFuture<Optional<NormalizedNode<?, ?>>, ReadFailedException> read2 = readTx2.read( LogicalDatastoreType.OPERATIONAL, build );
         NormalizedNode<?, ?> normalizedNode = read2.get().get();
         System.out.println("Normalized Node is : " + normalizedNode);
+        //rootTestNode=new
 
     }
     @Configuration
@@ -178,7 +179,7 @@ public class ToasterTest {
     	evaluate("//toasterManufacturer","Opendaylight");
     	evaluate("//toasterStatus","up");
 
-    	/*
+    	   /*
     	DOMDataReadOnlyTransaction readTx2 = domBroker.newReadOnlyTransaction();
         YangInstanceIdentifier build = YangInstanceIdentifier.builder( QName.create( new URI( "http://netconfcentral.org/ns/toaster"), Date.valueOf( "2009-11-20" ), "toaster" ) ).build();
         CheckedFuture<Optional<NormalizedNode<?, ?>>, ReadFailedException> read2 = readTx2.read( LogicalDatastoreType.OPERATIONAL, build );
@@ -189,8 +190,9 @@ public class ToasterTest {
         System.out.println("Normalized Node's node value is : " + normalizedNode.getValue());
 
         DataContainerNode<?> node=(DataContainerNode<?>) normalizedNode;
-        Iterator<DataContainerChild<? extends PathArgument, ?>> iterator = node.getValue().iterator();
-        System.out.println(iterator.getClass().getName());
+        Iterator<DataContainerChild<? extends org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier.PathArgument, ?>> iterator = node.getValue().iterator();
+
+
         while (iterator.hasNext()){
       	  System.out.println("Child node is :" + iterator.next());
         }

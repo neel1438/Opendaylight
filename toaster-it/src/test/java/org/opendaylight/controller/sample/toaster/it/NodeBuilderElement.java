@@ -3,6 +3,13 @@ package org.opendaylight.controller.sample.toaster.it;
 
 
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier.PathArgument;
+import org.opendaylight.yangtools.yang.data.api.schema.DataContainerChild;
+import org.opendaylight.yangtools.yang.data.api.schema.DataContainerNode;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -12,6 +19,10 @@ public class NodeBuilderElement extends NewElement{
 	boolean hasChildren;
 	NormalizedNode<?,?> node;
 	NodeBuilderElement parent;
+	NodeBuilderElement firstChild;
+	NodeBuilderElement lastChild;
+	NodeBuilderElement[] Children;
+
 
 	public NodeBuilderElement(NormalizedNode<?,?> node1,NodeBuilderElement parent1)
 	{
@@ -20,8 +31,20 @@ public class NodeBuilderElement extends NewElement{
 		if(node1.getValue() instanceof Iterable)
 		{
 			hasChildren=true;
+			List<DataContainerChild<? extends PathArgument, ?>>  children = new ArrayList<DataContainerChild<? extends PathArgument, ?>>();
+			DataContainerNode<?> dataContainerNode=(DataContainerNode<?>) node1;
+		  	Iterator<DataContainerChild<? extends PathArgument, ?>> iterator = dataContainerNode.getValue().iterator();
+		  	while (iterator.hasNext()){
+		     children.add(iterator.next());
+		    }
+		  	firstChild=new NodeBuilderElement(children.get(0),this);
+		  	lastChild=new NodeBuilderElement(children.get(children.size()-1),this);
+		  	for(int i=0;i<children.size();i++)
+		  	{
+//set siblings using this loop
+		  	}
 
-		}
+		 }
 		else
 		{
 			hasChildren=false;
@@ -83,13 +106,13 @@ public class NodeBuilderElement extends NewElement{
 	@Override
 	public Node getFirstChild() {
 
-		return null;
+		return firstChild;
 	}
 
 	@Override
 	public Node getLastChild() {
 
-		return null;
+		return lastChild;
 	}
 	@Override
 	public String getTextContent()
@@ -101,6 +124,4 @@ public class NodeBuilderElement extends NewElement{
 		return node.getValue().toString();
 
 	}
-
-
 }
