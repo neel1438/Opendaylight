@@ -3,9 +3,7 @@ package org.opendaylight.controller.sample.toaster.it;
 
 
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier.PathArgument;
 import org.opendaylight.yangtools.yang.data.api.schema.DataContainerChild;
@@ -19,16 +17,23 @@ public class NodeBuilderElement extends NewElement{
 	boolean hasChildren;
 	NormalizedNode<?,?> node;
 	NodeBuilderElement parent;
-	NodeBuilderElement firstChild;
+
 	NodeBuilderElement lastChild;
 	NodeBuilderElement[] Children;
+
+	boolean isFirstInit = false;
+	NodeBuilderElement firstChild;
+
+	boolean isFirstSiblingInit = false;
+	NodeBuilderElement nextSibling;
+	Iterator<DataContainerChild<? extends PathArgument, ?>> iterator;
 
 
 	public NodeBuilderElement(NormalizedNode<?,?> node1,NodeBuilderElement parent1)
 	{
 		node=node1;
 		parent=parent1;
-		if(node1.getValue() instanceof Iterable)
+	/*	if(node1.getValue() instanceof Iterable)
 		{
 			hasChildren=true;
 			List<DataContainerChild<? extends PathArgument, ?>>  children = new ArrayList<DataContainerChild<? extends PathArgument, ?>>();
@@ -48,9 +53,18 @@ public class NodeBuilderElement extends NewElement{
 		else
 		{
 			hasChildren=false;
-		}
+		}*/
 
 	}
+	  NodeBuilderElement( NormalizedNode<?,?> nodeDelegate, NodeBuilderElement parentNode, Iterator<DataContainerChild<? extends PathArgument, ?>> nextSib ){
+	        //store nodeDelegate to class variable
+	        //store parent to class variable.
+	        //store the iterator to the next sibling
+		  node=nodeDelegate;
+		  parent=parentNode;
+		  iterator=nextSib;
+
+	    }
 
 	@Override
 	public short getNodeType() {
@@ -71,7 +85,7 @@ public class NodeBuilderElement extends NewElement{
 
 	@Override
 	public boolean hasChildNodes() {
-		return hasChildren;
+		return (node.getValue() instanceof Iterable);
 	}
 	@Override
 	public boolean hasAttributes()
@@ -101,23 +115,39 @@ public class NodeBuilderElement extends NewElement{
 
 	@Override
 	public Node getNextSibling() {
-		return null;
+		 if( !isFirstSiblingInit ){
+	            //if nextSib iterator is not null, then call next() on it to get next sibling.
+	            //construct a NodeBuilderElement, passing in the new node, the same parent, and the same iterator
+	            //cache the node builder element to first child
+			 if(iterator.hasNext()){
+			 nextSibling=new NodeBuilderElement(iterator.next(),this,iterator);
+			 }
+			 isFirstSiblingInit=true;
+
+	        }
+		 return nextSibling;
 	}
 	@Override
 	public Node getFirstChild() {
+		  if( !isFirstInit ){
 
-		return firstChild;
+	            //get iterator on children, get first child from iterator
+			  DataContainerNode<?> dataContainerNode=(DataContainerNode<?>) node;
+			  Iterator<DataContainerChild<? extends PathArgument, ?>> iterator = dataContainerNode.getValue().iterator();
+			  firstChild=new NodeBuilderElement(iterator.next(),this,iterator);
+
+
+	            //construct a NodeBuilderElement, passing in the new node, the same parent, and the iterator
+	            //cache the node builder element to first child
+			  isFirstInit=true;
+	        }
+	        return firstChild;
 	}
 
-	@Override
-	public Node getLastChild() {
-
-		return lastChild;
-	}
 	@Override
 	public String getTextContent()
 	{
-		if(this.hasChildren)
+		if(this.hasChildNodes())
 		{
 			return null;
 		}
