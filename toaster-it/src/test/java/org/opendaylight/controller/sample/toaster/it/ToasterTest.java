@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2014 Cisco Systems, Inc. and others.  All rights reserved.
+ * Author : Neel Bommisetty
+ * Email : neel250294@gmail.com
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
@@ -173,10 +174,10 @@ public class ToasterTest {
     	System.out.println("Next Child is " + rootTestNode.getFirstChild().getNextSibling().getNodeName());
     	System.out.println("Next Child is " + rootTestNode.getFirstChild().getNextSibling().getNextSibling().getNodeName());
 
-    	evaluate("/toaster","toaster");
-     	evaluate("/toaster/toasterModelNumber","Model 1 - Binding Aware");
-     	evaluate("/toaster/toasterStatus","up");
-    	evaluate("/toaster/toasterManufacturer","Opendaylight");
+    	evaluate(".","toaster");
+     	evaluate("toasterModelNumber","Model 1 - Binding Aware");
+     	evaluate("toasterStatus","up");
+    	evaluate("toasterManufacturer","Opendaylight");
 
     }
 

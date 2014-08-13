@@ -1,7 +1,12 @@
+/*
+ * Author : Neel Bommisetty
+ * Email : neel250294@gmail.com
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ */
 package org.opendaylight.controller.sample.toaster.it;
-
-
-
 
 import java.util.Iterator;
 
@@ -33,27 +38,6 @@ public class NodeBuilderElement extends NewElement{
 	{
 		node=node1;
 		parent=parent1;
-	/*	if(node1.getValue() instanceof Iterable)
-		{
-			hasChildren=true;
-			List<DataContainerChild<? extends PathArgument, ?>>  children = new ArrayList<DataContainerChild<? extends PathArgument, ?>>();
-			DataContainerNode<?> dataContainerNode=(DataContainerNode<?>) node1;
-		  	Iterator<DataContainerChild<? extends PathArgument, ?>> iterator = dataContainerNode.getValue().iterator();
-		  	while (iterator.hasNext()){
-		     children.add(iterator.next());
-		    }
-		  	firstChild=new NodeBuilderElement(children.get(0),this);
-		  	lastChild=new NodeBuilderElement(children.get(children.size()-1),this);
-		  	for(int i=0;i<children.size();i++)
-		  	{
-//set siblings using this loop
-		  	}
-
-		 }
-		else
-		{
-			hasChildren=false;
-		}*/
 
 	}
 	  NodeBuilderElement( NormalizedNode<?,?> nodeDelegate, NodeBuilderElement parentNode, Iterator<DataContainerChild<? extends PathArgument, ?>> nextSib ){
@@ -100,7 +84,7 @@ public class NodeBuilderElement extends NewElement{
 	@Override
 	public String getNodeName() {
 
-		return node.getIdentifier().toString();
+		return node.getNodeType().getLocalName();
 	}
 
 	@Override
@@ -119,6 +103,7 @@ public class NodeBuilderElement extends NewElement{
 	            //if nextSib iterator is not null, then call next() on it to get next sibling.
 	            //construct a NodeBuilderElement, passing in the new node, the same parent, and the same iterator
 	            //cache the node builder element to first child
+
 			 if(iterator.hasNext()){
 			 nextSibling=new NodeBuilderElement(iterator.next(),this,iterator);
 			 }
@@ -132,9 +117,11 @@ public class NodeBuilderElement extends NewElement{
 		  if( !isFirstInit ){
 
 	            //get iterator on children, get first child from iterator
+			  if(! (node instanceof org.opendaylight.yangtools.yang.data.api.schema.LeafNode)){
 			  DataContainerNode<?> dataContainerNode=(DataContainerNode<?>) node;
 			  Iterator<DataContainerChild<? extends PathArgument, ?>> iterator = dataContainerNode.getValue().iterator();
 			  firstChild=new NodeBuilderElement(iterator.next(),this,iterator);
+			  }
 
 
 	            //construct a NodeBuilderElement, passing in the new node, the same parent, and the iterator
