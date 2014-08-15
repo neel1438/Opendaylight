@@ -134,11 +134,11 @@ public class NodeBuilderElement extends NewElement{
 	@Override
 	public String getTextContent()
 	{
-		if(this.hasChildNodes())
+		if(this.node instanceof org.opendaylight.yangtools.yang.data.api.schema.LeafNode)
 		{
-			return null;
+			return (String) this.node.getValue();
 		}
-		return node.getValue().toString();
+		return null;
 
 	}
 }

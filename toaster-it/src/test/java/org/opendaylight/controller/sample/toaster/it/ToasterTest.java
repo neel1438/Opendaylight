@@ -12,7 +12,6 @@ package org.opendaylight.controller.sample.toaster.it;
 
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.opendaylight.controller.test.sal.binding.it.TestHelper.baseModelBundles;
 import static org.opendaylight.controller.test.sal.binding.it.TestHelper.bindingAwareSalBundles;
 import static org.opendaylight.controller.test.sal.binding.it.TestHelper.configMinumumBundles;
@@ -27,6 +26,7 @@ import static org.ops4j.pax.exam.CoreOptions.systemProperty;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.Date;
+import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
@@ -47,6 +47,9 @@ import org.opendaylight.controller.md.sal.dom.api.DOMDataBroker;
 import org.opendaylight.controller.md.sal.dom.api.DOMDataReadOnlyTransaction;
 import org.opendaylight.yangtools.yang.common.QName;
 import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier;
+import org.opendaylight.yangtools.yang.data.api.YangInstanceIdentifier.PathArgument;
+import org.opendaylight.yangtools.yang.data.api.schema.DataContainerChild;
+import org.opendaylight.yangtools.yang.data.api.schema.DataContainerNode;
 import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.opendaylight.yangtools.yang.data.impl.codec.BindingIndependentMappingService;
 import org.ops4j.pax.exam.Configuration;
@@ -57,8 +60,6 @@ import org.ops4j.pax.exam.util.Filter;
 import org.ops4j.pax.exam.util.PathUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import com.google.common.base.Optional;
 import com.google.common.util.concurrent.CheckedFuture;
@@ -109,7 +110,13 @@ public class ToasterTest {
         CheckedFuture<Optional<NormalizedNode<?, ?>>, ReadFailedException> read2 = readTx2.read( LogicalDatastoreType.OPERATIONAL, build );
         NormalizedNode<?, ?> normalizedNode = read2.get().get();
         rootTestNode=new NodeBuilderElement(normalizedNode,null);
+        DataContainerNode<?> dataContainerNode=(DataContainerNode<?>) normalizedNode;
+		Iterator<DataContainerChild<? extends PathArgument, ?>> iterator = dataContainerNode.getValue().iterator();
+		while(iterator.hasNext())
+		{
+			System.out.println("the child node is :"+iterator.next().getValue());
 
+		}
     }
     @Configuration
     public Option[] config() {
@@ -150,11 +157,11 @@ public class ToasterTest {
     }
 
     public void evaluate(String xpathexp, String expectedValue) throws XPathExpressionException {
-        String node = (String) xpath.evaluate(xpathexp, rootTestNode, XPathConstants.STRING);
+        String node =  (String) xpath.evaluate(xpathexp, rootTestNode, XPathConstants.STRING);
         System.out.println( "'" + node + "'" );
         assertEquals(expectedValue, node);
     }
-
+/*
     @Test
     public void selfTest() throws XPathExpressionException {
         System.out.println("Testing1 ..!!");
@@ -165,7 +172,7 @@ public class ToasterTest {
         assertNotNull(root);
         assertEquals("toaster", root.getNodeName());
 
-    }
+    }*/
 
 
     @Test
@@ -174,7 +181,7 @@ public class ToasterTest {
     	System.out.println("Next Child is " + rootTestNode.getFirstChild().getNextSibling().getNodeName());
     	System.out.println("Next Child is " + rootTestNode.getFirstChild().getNextSibling().getNextSibling().getNodeName());
 
-    	evaluate(".","toaster");
+    	evaluate("name(.)","toaster");
      	evaluate("toasterModelNumber","Model 1 - Binding Aware");
      	evaluate("toasterStatus","up");
     	evaluate("toasterManufacturer","Opendaylight");
