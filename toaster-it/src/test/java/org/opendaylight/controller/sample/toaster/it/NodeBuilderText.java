@@ -1,77 +1,98 @@
+/*
+ * Author : Neel Bommisetty
+ * Email : neel250294@gmail.com
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ */
 package org.opendaylight.controller.sample.toaster.it;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-public class NodeBuilderText extends ThrowExceptionText{
-	Node parent;
-	Node nextSibling;
-	String nodeValue;
+public class NodeBuilderText extends ThrowExceptionText {
+    Node parent;
+    Node nextSibling;
+    String nodeValue;
 
+    public NodeBuilderText(String Nodevalue, Element parentNode,
+            Node nextsibling) {
 
+        nodeValue = Nodevalue;
+        parent = parentNode;
+        nextSibling = nextsibling;
+    }
 
-	public NodeBuilderText(String Nodevalue,Element parentNode,Node nextsibling)
-	{
-		nodeValue=Nodevalue;
-		parent=parentNode;
-		nextSibling=nextsibling;
-	}
+    @Override
+    public short getNodeType() {
+        return Node.TEXT_NODE;
 
-	public short getNodeType() {
-		return Node.TEXT_NODE;
+    }
 
-	}
-	public boolean hasAttributes()
-	{
-		return false;
-	}
-	public String getNodeValue()
-	{
-		return nodeValue;
-	}
+    @Override
+    public boolean hasAttributes() {
+        return false;
+    }
 
-	public String getNamespaceURI() {
-		return null;
+    @Override
+    public String getNodeValue() {
+        return nodeValue;
+    }
 
-	}
+    @Override
+    public String getNamespaceURI() {
+        return null;
 
-	public boolean hasChildNodes() {
-		return false;
-	}
+    }
 
-	public NamedNodeMap getAttributes() {
-		return null;
-	}
+    @Override
+    public boolean hasChildNodes() {
+        return false;
+    }
 
-	public String getNodeName() {
+    @Override
+    public NamedNodeMap getAttributes() {
+        return null;
+    }
 
-		return "#text";
-	}
+    @Override
+    public String getNodeName() {
 
-	public Node getParentNode() {
-		return parent;
-	}
+        return "#text";
+    }
 
-	public String getLocalName() {
-		return "#text";
-	}
+    @Override
+    public Node getParentNode() {
+        return parent;
+    }
 
-	public Node getNextSibling() {
-		return nextSibling;
-	}
-	public Node getFirstChild() {
+    @Override
+    public String getLocalName() {
+        return "#text";
+    }
 
-		return null;
-	}
+    @Override
+    public Node getNextSibling() {
+        return nextSibling;
+    }
 
-	public Node getLastChild() {
+    @Override
+    public Node getFirstChild() {
 
-		return null;
-	}
-	public String getTextContent()
-	{
-		return nodeValue;
+        return null;
+    }
 
-	}
+    @Override
+    public Node getLastChild() {
+
+        return null;
+    }
+
+    @Override
+    public String getTextContent() {
+        return nodeValue;
+
+    }
 }

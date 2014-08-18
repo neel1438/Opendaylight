@@ -91,29 +91,31 @@ public class ToasterTest {
     @Before
     public void setup() throws Exception {
         xpath = XPathFactory.newInstance().newXPath();
-        //setupRealXml();
+        // setupRealXml();
         setupNormalizedNode();
         System.out.println("Initialized!");
     }
 
     public void setupRealXml() throws Exception {
-        DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance()
+                .newDocumentBuilder();
         Document doc = dBuilder.parse("src/test/resources/toaster.xml");
         doc.normalizeDocument();
-        rootTestNode = (Element) xpath.evaluate("//toaster", doc, XPathConstants.NODE);
+        rootTestNode = (Element) xpath.evaluate("//toaster", doc,
+                XPathConstants.NODE);
 
     }
 
-    public void setupNormalizedNode() throws URISyntaxException, InterruptedException,
-            ExecutionException {
+    public void setupNormalizedNode() throws URISyntaxException,
+            InterruptedException, ExecutionException {
 
         DOMDataReadOnlyTransaction readTx2 = domBroker.newReadOnlyTransaction();
         @SuppressWarnings("deprecation")
         YangInstanceIdentifier build = YangInstanceIdentifier.builder(
                 QName.create(new URI("http://netconfcentral.org/ns/toaster"),
                         Date.valueOf("2009-11-20"), "toaster")).build();
-        CheckedFuture<Optional<NormalizedNode<?, ?>>, ReadFailedException> read2 = readTx2.read(
-                LogicalDatastoreType.OPERATIONAL, build);
+        CheckedFuture<Optional<NormalizedNode<?, ?>>, ReadFailedException> read2 = readTx2
+                .read(LogicalDatastoreType.OPERATIONAL, build);
         NormalizedNode<?, ?> normalizedNode = read2.get().get();
         rootTestNode = new NodeBuilderElement(normalizedNode, null);
 
@@ -124,14 +126,18 @@ public class ToasterTest {
         return options(
                 systemProperty("osgi.console").value("2401"),
                 mavenBundle("org.slf4j", "slf4j-api").versionAsInProject(), //
-                mavenBundle("org.slf4j", "log4j-over-slf4j").versionAsInProject(), //
+                mavenBundle("org.slf4j", "log4j-over-slf4j")
+                        .versionAsInProject(), //
 
                 systemProperty("logback.configurationFile").value(
-                        "file:" + PathUtils.getBaseDir() + "/src/test/resources/logback.xml"),
+                        "file:" + PathUtils.getBaseDir()
+                                + "/src/test/resources/logback.xml"),
                 // mavenBundle( "org.opendaylight.yangtools",
                 // "binding-data-codec" ).versionAsInProject(),
-                mavenBundle("ch.qos.logback", "logback-core").versionAsInProject(), //
-                mavenBundle("ch.qos.logback", "logback-classic").versionAsInProject(), //
+                mavenBundle("ch.qos.logback", "logback-core")
+                        .versionAsInProject(), //
+                mavenBundle("ch.qos.logback", "logback-classic")
+                        .versionAsInProject(), //
                 systemProperty("osgi.bundles.defaultStartLevel").value("4"),
                 systemPackages("sun.nio.ch"),
 
@@ -147,17 +153,21 @@ public class ToasterTest {
     }
 
     private Option toasterBundles() {
-        return new DefaultCompositeOption(mavenBundle("org.opendaylight.controller.samples",
+        return new DefaultCompositeOption(mavenBundle(
+                "org.opendaylight.controller.samples",
                 "sample-toaster-provider").versionAsInProject(), mavenBundle(
-                "org.opendaylight.controller.samples", "sample-toaster-consumer")
-                .versionAsInProject(), mavenBundle("org.opendaylight.controller.samples",
-                "sample-toaster").versionAsInProject(), mavenBundle("org.openexi", "nagasena")
-                .versionAsInProject(), mavenBundle("org.openexi", "nagasena-rta")
-                .versionAsInProject());
+                "org.opendaylight.controller.samples",
+                "sample-toaster-consumer").versionAsInProject(), mavenBundle(
+                "org.opendaylight.controller.samples", "sample-toaster")
+                .versionAsInProject(), mavenBundle("org.openexi", "nagasena")
+                .versionAsInProject(), mavenBundle("org.openexi",
+                "nagasena-rta").versionAsInProject());
     }
 
-    public void evaluate(String xpathexp, String expectedValue) throws XPathExpressionException {
-        String node = (String) xpath.evaluate(xpathexp, rootTestNode, XPathConstants.STRING);
+    public void evaluate(String xpathexp, String expectedValue)
+            throws XPathExpressionException {
+        String node = (String) xpath.evaluate(xpathexp, rootTestNode,
+                XPathConstants.STRING);
         System.out.println("'" + node + "'");
         assertEquals(expectedValue, node);
     }
@@ -165,7 +175,8 @@ public class ToasterTest {
     @Test
     public void selfTest() throws XPathExpressionException {
         System.out.println("Testing1 ..!!");
-        NodeList nodelist = (NodeList) xpath.evaluate(".", rootTestNode, XPathConstants.NODESET);
+        NodeList nodelist = (NodeList) xpath.evaluate(".", rootTestNode,
+                XPathConstants.NODESET);
         assertNotNull(nodelist);
         assertEquals(1, nodelist.getLength());
         Node root = nodelist.item(0);
@@ -176,35 +187,36 @@ public class ToasterTest {
 
     @Test
     public void testToaster() throws Exception {
-        System.out.println("First Child is " + rootTestNode.getFirstChild().getNodeName());
-        System.out.println("Next Child is "
-                + rootTestNode.getFirstChild().getNextSibling().getNodeName());
-        System.out.println("Next Child is "
-                + rootTestNode.getFirstChild().getNextSibling().getNextSibling().getNodeName());
 
-        System.out.println( "========== " );
+        System.out.println("========== ");
         printDocument(rootTestNode, System.out);
-        System.out.println( "========== " );
+        System.out.println("========== ");
 
-        evaluate(".", "toaster");
+        evaluate("name(.)", "toaster");
         evaluate("toasterModelNumber", "Model 1 - Binding Aware");
         evaluate("toasterStatus", "up");
         evaluate("toasterManufacturer", "Opendaylight");
+        evaluate("//toasterMaker", "ChildOpendaylight");
+        evaluate("//toasterModel", "ChildModel 1 - Binding Aware");
+        evaluate("/childtoaster/toasterMaker", "ChildOpendaylight");
+        evaluate("/childtoster/toasterModel", "ChildModel 1 - Binding Aware");
+
 
     }
 
-    public static void printDocument(Element doc, OutputStream out) throws IOException,
-            TransformerException {
+    public static void printDocument(Element doc, OutputStream out)
+            throws IOException, TransformerException {
         TransformerFactory tf = TransformerFactory.newInstance();
         Transformer transformer = tf.newTransformer();
         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
         transformer.setOutputProperty(OutputKeys.METHOD, "xml");
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+        transformer.setOutputProperty(
+                "{http://xml.apache.org/xslt}indent-amount", "4");
 
-        transformer.transform(new DOMSource(doc), new StreamResult(new OutputStreamWriter(out,
-                "UTF-8")));
+        transformer.transform(new DOMSource(doc), new StreamResult(
+                new OutputStreamWriter(out, "UTF-8")));
     }
 
 }

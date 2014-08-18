@@ -33,13 +33,15 @@ public class NodeBuilderElement extends NewElement {
     NodeBuilderElement nextSibling;
     Iterator<DataContainerChild<? extends PathArgument, ?>> iterator;
 
-    public NodeBuilderElement(NormalizedNode<?, ?> node1, NodeBuilderElement parent1) {
+    public NodeBuilderElement(NormalizedNode<?, ?> node1,
+            NodeBuilderElement parent1) {
         node = node1;
         parent = parent1;
 
     }
 
-    NodeBuilderElement(NormalizedNode<?, ?> nodeDelegate, NodeBuilderElement parentNode,
+    NodeBuilderElement(NormalizedNode<?, ?> nodeDelegate,
+            NodeBuilderElement parentNode,
             Iterator<DataContainerChild<? extends PathArgument, ?>> nextSib) {
         // store nodeDelegate to class variable
         // store parent to class variable.
@@ -108,7 +110,8 @@ public class NodeBuilderElement extends NewElement {
             // cache the node builder element to first child
 
             if (iterator.hasNext()) {
-                nextSibling = new NodeBuilderElement(iterator.next(), this, iterator);
+                nextSibling = new NodeBuilderElement(iterator.next(), this,
+                        iterator);
             }
             isFirstSiblingInit = true;
 
@@ -125,9 +128,11 @@ public class NodeBuilderElement extends NewElement {
                 DataContainerNode<?> dataContainerNode = (DataContainerNode<?>) node;
                 Iterator<DataContainerChild<? extends PathArgument, ?>> iterator = dataContainerNode
                         .getValue().iterator();
-                firstChild = new NodeBuilderElement(iterator.next(), this, iterator);
+                firstChild = new NodeBuilderElement(iterator.next(), this,
+                        iterator);
             } else {
-                firstChild = new NodeBuilderText( node.getValue().toString(), this, null );
+                firstChild = new NodeBuilderText(node.getValue().toString(),
+                        this, null);
             }
 
             // construct a NodeBuilderElement, passing in the new node, the same
@@ -141,7 +146,7 @@ public class NodeBuilderElement extends NewElement {
     @Override
     public String getTextContent() {
         if (this.hasChildNodes()) {
-            return "devin";
+            return "Text Content";
         }
         return node.getValue().toString();
 

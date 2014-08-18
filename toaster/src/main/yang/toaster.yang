@@ -121,7 +121,8 @@
         description
           "The darkness factor. Basically, the number of ms to multiple the doneness value by.";
       }
-      container childtoaster {
+    	
+    	  container childtoaster {
       presence
         "Indicates the  Childtoaster service is available";
       description
@@ -146,7 +147,7 @@
 
         
      
-    } 
+    }
     }  // container toaster
 
     rpc make-toast {
