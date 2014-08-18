@@ -198,8 +198,8 @@ public class ToasterTest {
         evaluate("toasterManufacturer", "Opendaylight");
         evaluate("//toasterMaker", "ChildOpendaylight");
         evaluate("//toasterModel", "ChildModel 1 - Binding Aware");
-        evaluate("/childtoaster/toasterMaker", "ChildOpendaylight");
-        evaluate("/childtoster/toasterModel", "ChildModel 1 - Binding Aware");
+        evaluate("childtoaster/toasterMaker", "ChildOpendaylight");
+        evaluate("childtoaster/toasterModel", "ChildModel 1 - Binding Aware");
 
 
     }
