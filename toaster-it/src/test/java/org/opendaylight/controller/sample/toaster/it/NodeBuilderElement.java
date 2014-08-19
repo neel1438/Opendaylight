@@ -123,22 +123,48 @@ public class NodeBuilderElement extends NewElement {
     public Node getFirstChild() {
         if (!isFirstInit) {
 
+            if(node instanceof org.opendaylight.yangtools.yang.data.api.schema.LeafNode)
+            {
+                firstChild = new NodeBuilderText(node.getValue().toString(),
+                        this, null);
+            }
+            else if(node instanceof org.opendaylight.yangtools.yang.data.api.schema.UnkeyedListNode )
+            {
+                // handle list here ..
+                @SuppressWarnings("unchecked")
+                Iterable<NormalizedNode<?, ?>> list=((Iterable<NormalizedNode<?, ?>>) node.getValue());
+
+                for (NormalizedNode<?,?> child: list)
+                {
+                    DataContainerNode<?> dataContainerNode = (DataContainerNode<?>) child;
+                    Iterator<DataContainerChild<? extends PathArgument, ?>> iterator = dataContainerNode
+                            .getValue().iterator();
+                    firstChild = new NodeBuilderElement(iterator.next(), this,
+                            iterator);
+               }
+            }
+            else if(    node instanceof org.opendaylight.yangtools.yang.data.api.schema.LeafSetNode )
+            {
+                // handle list here ..
+                @SuppressWarnings("unchecked")
+                Iterable<NormalizedNode<?, ?>> list=((Iterable<NormalizedNode<?, ?>>) node.getValue());
+
+                for (NormalizedNode<?,?> child: list)
+                {
+                    firstChild = new NodeBuilderText(child.getValue().toString(),this, null);
+               }
+            }
+
+
             // get iterator on children, get first child from iterator
-            if (!(node instanceof org.opendaylight.yangtools.yang.data.api.schema.LeafNode)&& !(node instanceof org.opendaylight.yangtools.yang.data.api.schema.UnkeyedListNode)) {
+            else {
                 DataContainerNode<?> dataContainerNode = (DataContainerNode<?>) node;
                 Iterator<DataContainerChild<? extends PathArgument, ?>> iterator = dataContainerNode
                         .getValue().iterator();
                 firstChild = new NodeBuilderElement(iterator.next(), this,
                         iterator);
             }
-            else if(node instanceof org.opendaylight.yangtools.yang.data.api.schema.LeafNode) {
-                firstChild = new NodeBuilderText(node.getValue().toString(),
-                        this, null);
-            }
-            else
-            {
-                // handle list here ..
-            }
+
 
             // construct a NodeBuilderElement, passing in the new node, the same
             // parent, and the iterator

@@ -202,6 +202,7 @@ public class ToasterTest {
         evaluate("childtoaster/toasterModel", "ChildModel 1 - Binding Aware");
 
 
+
     }
 
     public static void printDocument(Element doc, OutputStream out)
