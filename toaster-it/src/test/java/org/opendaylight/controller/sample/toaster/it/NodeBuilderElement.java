@@ -124,15 +124,20 @@ public class NodeBuilderElement extends NewElement {
         if (!isFirstInit) {
 
             // get iterator on children, get first child from iterator
-            if (!(node instanceof org.opendaylight.yangtools.yang.data.api.schema.LeafNode)) {
+            if (!(node instanceof org.opendaylight.yangtools.yang.data.api.schema.LeafNode)&& !(node instanceof org.opendaylight.yangtools.yang.data.api.schema.UnkeyedListNode)) {
                 DataContainerNode<?> dataContainerNode = (DataContainerNode<?>) node;
                 Iterator<DataContainerChild<? extends PathArgument, ?>> iterator = dataContainerNode
                         .getValue().iterator();
                 firstChild = new NodeBuilderElement(iterator.next(), this,
                         iterator);
-            } else {
+            }
+            else if(node instanceof org.opendaylight.yangtools.yang.data.api.schema.LeafNode) {
                 firstChild = new NodeBuilderText(node.getValue().toString(),
                         this, null);
+            }
+            else
+            {
+                // handle list here ..
             }
 
             // construct a NodeBuilderElement, passing in the new node, the same
