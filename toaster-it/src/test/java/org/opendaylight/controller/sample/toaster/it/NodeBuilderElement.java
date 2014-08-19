@@ -17,6 +17,8 @@ import org.opendaylight.yangtools.yang.data.api.schema.NormalizedNode;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import com.google.common.collect.Iterators;
+
 public class NodeBuilderElement extends NewElement {
 
     boolean hasChildren;
@@ -132,27 +134,36 @@ public class NodeBuilderElement extends NewElement {
             {
                 // handle list here ..
                 @SuppressWarnings("unchecked")
-                Iterable<NormalizedNode<?, ?>> list=((Iterable<NormalizedNode<?, ?>>) node.getValue());
+                Iterable<DataContainerChild<? extends PathArgument, ?>> list=((Iterable<DataContainerChild<? extends PathArgument, ?>>) node.getValue());
 
-                for (NormalizedNode<?,?> child: list)
-                {
-                    DataContainerNode<?> dataContainerNode = (DataContainerNode<?>) child;
+                Iterator<DataContainerChild<? extends PathArgument, ?>> listiter = list.iterator();
+
+                    DataContainerNode<?> dataContainerNode = (DataContainerNode<?>) listiter.next();
+
                     Iterator<DataContainerChild<? extends PathArgument, ?>> iterator = dataContainerNode
                             .getValue().iterator();
                     firstChild = new NodeBuilderElement(iterator.next(), this,
                             iterator);
-               }
+                    this.iterator=Iterators.concat(listiter,this.iterator);
+
+
+
             }
-            else if(    node instanceof org.opendaylight.yangtools.yang.data.api.schema.LeafSetNode )
+            else if( node instanceof org.opendaylight.yangtools.yang.data.api.schema.LeafSetNode )
             {
                 // handle list here ..
                 @SuppressWarnings("unchecked")
-                Iterable<NormalizedNode<?, ?>> list=((Iterable<NormalizedNode<?, ?>>) node.getValue());
+                Iterable<NormalizedNode<?,?>> list=((Iterable<NormalizedNode<?,?>>)node.getValue());
 
-                for (NormalizedNode<?,?> child: list)
-                {
-                    firstChild = new NodeBuilderText(child.getValue().toString(),this, null);
-               }
+                Iterator<NormalizedNode<?,?>>listiter = list.iterator();
+
+
+
+                    firstChild = new NodeBuilderText(listiter.next().getValue().toString(),this, null);
+
+                    //TypeConflict here
+                    //  this.iterator=Iterators.concat(listiter,this.iterator);
+
             }
 
 
