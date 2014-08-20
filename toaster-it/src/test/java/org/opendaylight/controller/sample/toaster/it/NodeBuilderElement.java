@@ -19,6 +19,9 @@ import org.w3c.dom.Node;
 
 import com.google.common.collect.Iterators;
 
+/*
+ *
+ */
 public class NodeBuilderElement extends NewElement {
 
     boolean hasChildren;
@@ -33,7 +36,8 @@ public class NodeBuilderElement extends NewElement {
 
     boolean isFirstSiblingInit = false;
     NodeBuilderElement nextSibling;
-    Iterator<DataContainerChild<? extends PathArgument, ?>> iterator;
+    @SuppressWarnings("rawtypes")
+    Iterator iterator;
 
     public NodeBuilderElement(NormalizedNode<?, ?> node1,
             NodeBuilderElement parent1) {
@@ -42,9 +46,8 @@ public class NodeBuilderElement extends NewElement {
 
     }
 
-    NodeBuilderElement(NormalizedNode<?, ?> nodeDelegate,
-            NodeBuilderElement parentNode,
-            Iterator<DataContainerChild<? extends PathArgument, ?>> nextSib) {
+    @SuppressWarnings("rawtypes")
+    NodeBuilderElement(NormalizedNode<?, ?> nodeDelegate,NodeBuilderElement parentNode,Iterator nextSib) {
         // store nodeDelegate to class variable
         // store parent to class variable.
         // store the iterator to the next sibling
@@ -112,8 +115,7 @@ public class NodeBuilderElement extends NewElement {
             // cache the node builder element to first child
 
             if (iterator.hasNext()) {
-                nextSibling = new NodeBuilderElement(iterator.next(), this,
-                        iterator);
+                nextSibling = new NodeBuilderElement((NormalizedNode<?, ?>) iterator.next(), this,this.iterator);
             }
             isFirstSiblingInit = true;
 
@@ -121,11 +123,14 @@ public class NodeBuilderElement extends NewElement {
         return nextSibling;
     }
 
+
+    @SuppressWarnings("unchecked")
     @Override
     public Node getFirstChild() {
         if (!isFirstInit) {
 
-            if(node instanceof org.opendaylight.yangtools.yang.data.api.schema.LeafNode)
+            if(node instanceof org.opendaylight.yangtools.yang.data.api.schema.LeafNode||
+                    node instanceof org.opendaylight.yangtools.yang.data.api.schema.LeafSetEntryNode)
             {
                 firstChild = new NodeBuilderText(node.getValue().toString(),
                         this, null);
@@ -133,7 +138,7 @@ public class NodeBuilderElement extends NewElement {
             else if(node instanceof org.opendaylight.yangtools.yang.data.api.schema.UnkeyedListNode )
             {
                 // handle list here ..
-                @SuppressWarnings("unchecked")
+
                 Iterable<DataContainerChild<? extends PathArgument, ?>> list=((Iterable<DataContainerChild<? extends PathArgument, ?>>) node.getValue());
 
                 Iterator<DataContainerChild<? extends PathArgument, ?>> listiter = list.iterator();
@@ -152,7 +157,7 @@ public class NodeBuilderElement extends NewElement {
             else if( node instanceof org.opendaylight.yangtools.yang.data.api.schema.LeafSetNode )
             {
                 // handle list here ..
-                @SuppressWarnings("unchecked")
+
                 Iterable<NormalizedNode<?,?>> list=((Iterable<NormalizedNode<?,?>>)node.getValue());
 
                 Iterator<NormalizedNode<?,?>>listiter = list.iterator();
@@ -162,7 +167,7 @@ public class NodeBuilderElement extends NewElement {
                     firstChild = new NodeBuilderText(listiter.next().getValue().toString(),this, null);
 
                     //TypeConflict here
-                    //  this.iterator=Iterators.concat(listiter,this.iterator);
+                     this.iterator=Iterators.concat(listiter,this.iterator);
 
             }
 
