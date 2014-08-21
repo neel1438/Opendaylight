@@ -190,13 +190,15 @@ public class ToasterTest {
         System.out.println("========== ");
 
         evaluate("name(.)", "toaster");
-        //evaluate("toasterModelNumber", "Model 1 - Binding Aware");
-        evaluate("toasterStatus", "up");
+        evaluate("//toasterModelNumber", "Model 1 - Binding Aware");
+        evaluate("//toasterStatus", "up");
         evaluate("toasterManufacturer", "Opendaylight");
         evaluate("//toasterMaker", "ChildOpendaylight");
         evaluate("//toasterModel", "ChildModel 1 - Binding Aware");
         evaluate("childtoaster/toasterMaker", "ChildOpendaylight");
         evaluate("childtoaster/toasterModel", "ChildModel 1 - Binding Aware");
+        evaluate("//toastervalue", "Value2");
+
 
 
 

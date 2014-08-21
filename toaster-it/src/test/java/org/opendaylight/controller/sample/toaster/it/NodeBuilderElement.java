@@ -132,12 +132,15 @@ public class NodeBuilderElement extends NewElement {
             if(node instanceof org.opendaylight.yangtools.yang.data.api.schema.LeafNode||
                     node instanceof org.opendaylight.yangtools.yang.data.api.schema.LeafSetEntryNode)
             {
-                firstChild = new NodeBuilderText(node.getValue().toString(),
-                        this, null);
+              //  System.out.println("The node is "+ this.getNodeName());
+              //  System.out.println("The above node is either leaf node or leafsetentry node");
+                firstChild = new NodeBuilderText(node.getValue().toString(),this,null);
             }
             else if(node instanceof org.opendaylight.yangtools.yang.data.api.schema.UnkeyedListNode )
             {
                 // handle list here ..
+               // System.out.println("The node is "+ this.getNodeName());
+
 
                 Iterable<DataContainerChild<? extends PathArgument, ?>> list=((Iterable<DataContainerChild<? extends PathArgument, ?>>) node.getValue());
 
@@ -145,41 +148,52 @@ public class NodeBuilderElement extends NewElement {
 
                     DataContainerNode<?> dataContainerNode = (DataContainerNode<?>) listiter.next();
 
-                    Iterator<DataContainerChild<? extends PathArgument, ?>> iterator = dataContainerNode
+                    Iterator<DataContainerChild<? extends PathArgument, ?>> Childiterator = dataContainerNode
                             .getValue().iterator();
-                    firstChild = new NodeBuilderElement(iterator.next(), this,
-                            iterator);
+                    firstChild = new NodeBuilderElement((NormalizedNode<?, ?>) iterator.next(), this,
+                            Childiterator);
                     this.iterator=Iterators.concat(listiter,this.iterator);
-
+                  //  System.out.println("its first child is "+ firstChild.getNodeName());
 
 
             }
             else if( node instanceof org.opendaylight.yangtools.yang.data.api.schema.LeafSetNode )
             {
                 // handle list here ..
-
+              //  System.out.println("The node is "+ this.getNodeName());
                 Iterable<NormalizedNode<?,?>> list=((Iterable<NormalizedNode<?,?>>)node.getValue());
 
                 Iterator<NormalizedNode<?,?>>listiter = list.iterator();
 
-
-
                     firstChild = new NodeBuilderText(listiter.next().getValue().toString(),this, null);
-
                     //TypeConflict here
                      this.iterator=Iterators.concat(listiter,this.iterator);
-
+                //     System.out.println("its first child is "+ firstChild.getNodeName());
             }
-
 
             // get iterator on children, get first child from iterator
             else {
+              //  System.out.println("The node is "+ this.getNodeName());
                 DataContainerNode<?> dataContainerNode = (DataContainerNode<?>) node;
-                Iterator<DataContainerChild<? extends PathArgument, ?>> iterator = dataContainerNode
+                Iterator<DataContainerChild<? extends PathArgument, ?>> dataiterator = dataContainerNode
                         .getValue().iterator();
-                firstChild = new NodeBuilderElement(iterator.next(), this,
+                DataContainerChild<? extends PathArgument, ?> something = dataiterator.next();
+                if (something instanceof org.opendaylight.yangtools.yang.data.api.schema.UnkeyedListNode )
+                {
+                    Iterable<NormalizedNode<?, ?>> containerlist=(Iterable<NormalizedNode<?,?>>) something.getValue();
+                    Iterator<NormalizedNode<?, ?>> containerListIterator = containerlist.iterator();
+
+                    NormalizedNode<?, ?> someNode = containerListIterator.next();
+
+                    firstChild = new NodeBuilderElement(someNode, this,
+                           containerListIterator);
+                 }
+                else
+                {
+                firstChild = new NodeBuilderElement(something, this,
                         iterator);
-            }
+                }
+              }
 
 
             // construct a NodeBuilderElement, passing in the new node, the same
